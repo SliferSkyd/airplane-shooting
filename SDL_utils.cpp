@@ -21,11 +21,11 @@ void initSDL() {
     SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1) logSDLError(std::cout, "Init Audio", true);
-    bulletSound[0] = Mix_LoadWAV("data/sound/laser.wav");
-    bulletSound[1] = Mix_LoadWAV("data/sound/sphere.wav");
-    expSound[0] = Mix_LoadWAV("data/sound/explosion.wav");
-    expSound[1] = Mix_LoadWAV("data/sound/bomb.wav");
-    if (bulletSound[0] == NULL || bulletSound[1] == NULL || expSound[0] == NULL || expSound[1] == NULL) logSDLError(std::cout, "Can not open Audio", true);
+    sound.resize(pathSound.size());
+    for (int i = 0; i < pathSound.size(); ++i) {
+        sound[i] = Mix_LoadWAV(("data/sound/" + pathSound[i] + ".wav").c_str());
+        if (sound[i] == NULL) logSDLError(std::cout, "Can not open Audio", true);
+    }
 }
 
 void quitSDL() {
@@ -115,10 +115,6 @@ void messageBox(string message) {
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Game Over!", message.c_str(), window);
 }
 
-void playBulletSound(int type) {
-    Mix_PlayChannel(-1, bulletSound[type], 0);
-}
-
-void playExplosionSound(int type) {
-    Mix_PlayChannel(-1, expSound[type], 0);
+void playSound(int type) {
+    Mix_PlayChannel(-1, sound[type], 0);
 }
