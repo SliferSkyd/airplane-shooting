@@ -15,8 +15,10 @@ const int MAX_LEN = 4000;
 const string WINDOW_TITLE = "Airplane Shooting";
 const double PI = acos(-1);
 
-static SDL_Window *window = NULL;
-static SDL_Renderer *renderer = NULL;
+static SDL_Window* window = NULL;
+static SDL_Renderer* renderer = NULL;
+static Mix_Chunk* bulletSound[2];
+static Mix_Chunk* expSound[2];
 
 void logSDLError(std::ostream& os, const std::string &msg, bool fatal = false);
 void initSDL();
@@ -33,5 +35,7 @@ void show();
 int Rand(int L, int R);
 bool checkCollision(const SDL_Rect& rect1, const SDL_Rect& rect2);
 void messageBox(string message);
+void playBulletSound(int type);
+void playExplosionSound(int type);
 
 #endif

@@ -34,9 +34,11 @@ void mainObject::handleInputAction(SDL_Event events) {
         if (events.button.button == SDL_BUTTON_LEFT) {
             bullet->loadImage("data/image/laser.png");
             bullet->setType(bulletObject::LASER);
+            playBulletSound(0);
         } else {
             bullet->loadImage("data/image/sphere.png");
             bullet->setType(bulletObject::SPHERE);
+            playBulletSound(1);
         }
         bullet->setSpeed(20);
         bullet->setAngle(angle);

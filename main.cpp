@@ -10,7 +10,7 @@
 
 using namespace std;
 
-const int NUM_THREATS = 1;
+const int NUM_THREATS = 2;
 const int WAIT_TIME = 200;
 
 void gameOver() {
@@ -35,7 +35,7 @@ int main(int argc, char ** argv) {
         enemy->loadImage("data/image/enemy.png");
         enemy->setSpeed(4);
         enemy->setDuration(2);
-        enemy->setHasRadar(1);
+        enemy->setHasRadar(Rand(0, 1));
         enemies.push_back(enemy);
     }
     target aim;
@@ -73,6 +73,7 @@ int main(int argc, char ** argv) {
             for (int j = 0; j < bulletList.size(); ++j) {
                 bulletObject* bullet = bulletList.at(j);
                 if (checkCollision(bullet->getRect(), enemy->getRect())) {
+                    playExplosionSound(0);
                     for (int k = 0; k < 4; ++k) {
                         int x = enemy->getRect().x + enemy->getRect().w / 2 - expMain->getClip(k).w / 2;
                         int y = enemy->getRect().y + enemy->getRect().h / 2 - expMain->getClip(k).h / 2;
@@ -91,6 +92,7 @@ int main(int argc, char ** argv) {
             plane->setBulletList(bulletList);
             if (destroyed) continue;
             if (checkCollision(enemy->getRect(), plane->getRect())) {
+                playExplosionSound(1);
                 for (int j = 0; j < 4; ++j) {
                     int x = plane->getRect().x + plane->getRect().w / 2 - expMain->getClip(j).w / 2;
                     int y = plane->getRect().y + plane->getRect().h / 2 - expMain->getClip(j).h / 2;
@@ -105,6 +107,7 @@ int main(int argc, char ** argv) {
             for (int j = 0; j < bulletList.size(); ++j) {
                 bulletObject* bullet = bulletList.at(j);
                 if (checkCollision(bullet->getRect(), plane->getRect())) {
+                    playExplosionSound(1);
                     for (int k = 0; k < 4; ++k) {
                         int x = plane->getRect().x + plane->getRect().w / 2 - expMain->getClip(k).w / 2;
                         int y = plane->getRect().y + plane->getRect().h / 2 - expMain->getClip(k).h / 2;
