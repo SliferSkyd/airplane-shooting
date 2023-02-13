@@ -1,6 +1,9 @@
 #include "Level.h"
 
-void level::init(int idLevel, int numThreat, int speedMain, int speedThreat) {
+void level::init(int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat) {
+    healthPoint = 5;
+    assert(numThreat >= numHasRadar);
+    vector<bool> hasRadar = randomTrueFalse(numHasRadar, numThreat - numHasRadar);
     background = loadTexture("data/image/bg4800.png");
     plane->loadImage("data/image/plane.png");
     plane->setRect(10, Rand(10, SCREEN_HEIGHT - 100));
@@ -12,7 +15,7 @@ void level::init(int idLevel, int numThreat, int speedMain, int speedThreat) {
         enemy->loadImage("data/image/enemy.png");
         enemy->setSpeed(speedThreat);
         enemy->setDuration(2);
-        enemy->setHasRadar(Rand(0, 1));
+        enemy->setHasRadar(hasRadar[i]);
         enemies.push_back(enemy);
     }
     expMain->loadImage("data/image/exp_main.png");
@@ -22,11 +25,21 @@ void level::init(int idLevel, int numThreat, int speedMain, int speedThreat) {
     aim->loadImage("data/image/target.png");    
 }
 
+void level::killed() {
+    --healthPoint;
+    if (!healthPoint) gameOver();
+}
+
 void level::gameOver() {
     playSound(5);
     messageBox("Ga vcl");
     quitSDL();
     exit(1);
+}
+
+void level::nextLevel() {
+    playSound(4);
+    messageBox("Я тебя люблю");
 }
 
 void level::run() {
@@ -82,7 +95,7 @@ void level::run() {
                     expMain->burn(plane);
                     show();      
                 }
-                gameOver();
+                killed();
             }
             bulletList = enemy->getBulletList();
             for (int j = 0; j < bulletList.size(); ++j) {
@@ -95,7 +108,7 @@ void level::run() {
                         show();       
                     }
                     bulletList.erase(bulletList.begin() + j);
-                    gameOver();
+                    killed();
                 }
             }
             enemy->setBulletList(bulletList);
@@ -104,9 +117,8 @@ void level::run() {
         show();
         if (bkg < MAX_LEN - SCREEN_WIDTH) ++bkg;
         if (enemies.empty()) {
-            playSound(4);
-            messageBox("Я тебя люблю");
-            break;
+            nextLevel();
+            return;
         }
     }
 }

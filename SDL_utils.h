@@ -36,5 +36,6 @@ int Rand(int L, int R);
 bool checkCollision(const SDL_Rect& rect1, const SDL_Rect& rect2);
 void messageBox(string message);
 void playSound(int type);
+std::vector<bool> randomTrueFalse(int numTrue, int numFalse);
 
 #endif

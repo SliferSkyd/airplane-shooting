@@ -20,12 +20,14 @@ class level {
     target *aim = new target();
     explosionObject *expMain = new explosionObject(), *expThreat = new explosionObject();
     SDL_Texture* background;
-    
+    int healthPoint;
+
 public:
-    void init(int idLevel, int numThreat, int speedMain, int speedThreat);
+    void init(int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat);
     void gameOver();
     void nextLevel();
     void run();
+    void killed();
 };
 
 #endif

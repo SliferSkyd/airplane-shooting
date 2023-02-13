@@ -118,3 +118,14 @@ void messageBox(string message) {
 void playSound(int type) {
     Mix_PlayChannel(-1, sound[type], 0);
 }
+
+std::vector<bool> randomTrueFalse(int numTrue, int numFalse) {
+    int num = numTrue + numFalse;
+    std::vector<int> p(num);
+    for (int i = 0; i < num; ++i) p[i] = i;
+    std::random_shuffle(p.begin(), p.end());
+    std::vector<bool> ret(num);
+    for (int i = 0; i < num; ++i)
+        ret[i] = (p[i] < numTrue);
+    return ret;
+}
