@@ -38,14 +38,14 @@ void level::gameOver() {
     HP->show();
     show();
     playSound(5);
-    messageBox("Ga vcl");
+    messageBox("Siuuuu");
     quitSDL();
     exit(1);
 }
 
 void level::nextLevel() {
     playSound(4);
-    messageBox("Я тебя люблю");
+    messageBox("Congratulations! You won!");
 }
 
 void level::run() {
