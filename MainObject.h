@@ -10,7 +10,6 @@
 #include "BulletObject.h"
 
 using namespace std;
-
 class mainObject: public baseObject {
 public:
     mainObject();
@@ -23,7 +22,7 @@ public:
     std::vector<bulletObject*> getBulletList() const {
         return bulletList;
     }
-    void makeAmo();
+    void makeBullet();
 private:
     int xVal, yVal;    
     std::vector<bulletObject*> bulletList;

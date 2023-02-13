@@ -48,7 +48,7 @@ void mainObject::handleInputAction(SDL_Event events) {
     }
 }
 
-void mainObject::makeAmo() {
+void mainObject::makeBullet() {
     for (int i = 0; i < bulletList.size(); ++i) {
         bulletObject* bullet = bulletList.at(i);
         if (bullet != NULL) {

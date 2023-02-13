@@ -10,6 +10,7 @@
 #include "MainObject.h"
 #include "ThreatObject.h"
 #include "ExplosionObject.h"
+#include "HPObject.h"
 #include "target.h"
 
 using namespace std;
@@ -19,9 +20,9 @@ class level {
     std::vector<threatObject*> enemies;
     target *aim = new target();
     explosionObject *expMain = new explosionObject(), *expThreat = new explosionObject();
-    SDL_Texture* background;
-    int healthPoint;
-
+    SDL_Texture *background;
+    hpObject *HP = new hpObject();
+    int bkg;
 public:
     void init(int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat);
     void gameOver();

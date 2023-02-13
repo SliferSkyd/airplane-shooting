@@ -15,7 +15,7 @@ public:
     baseObject();
     ~baseObject();
     void show();
-    bool loadImage(const std::string& path);
+    void loadImage(const std::string& path);
     void setRect(const int& x, const int& y) {
         rect.x = x, rect.y = y;
     }

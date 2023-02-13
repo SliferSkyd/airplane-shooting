@@ -1,7 +1,7 @@
 #include "Level.h"
 
 void level::init(int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat) {
-    healthPoint = 5;
+    HP->loadImage("data/image/HP0.png", "data/image/HP1.png");
     assert(numThreat >= numHasRadar);
     vector<bool> hasRadar = randomTrueFalse(numHasRadar, numThreat - numHasRadar);
     background = loadTexture("data/image/bg4800.png");
@@ -26,11 +26,17 @@ void level::init(int idLevel, int numThreat, int numHasRadar, int speedMain, int
 }
 
 void level::killed() {
-    --healthPoint;
-    if (!healthPoint) gameOver();
+    HP->subHP();
+    if (HP->getHP() == 0) {
+        gameOver();
+    }
 }
 
 void level::gameOver() {
+    clrscr();
+    applyTexture(background, bkg, 0, SCREEN_WIDTH);
+    HP->show();
+    show();
     playSound(5);
     messageBox("Ga vcl");
     quitSDL();
@@ -45,7 +51,6 @@ void level::nextLevel() {
 void level::run() {
     SDL_Event e;
     bool quit = false;
-    int bkg = 0;
     while (!quit) {
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) {
@@ -57,9 +62,10 @@ void level::run() {
         }
         clrscr();
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
+        HP->show();
         plane->handleMove();
         plane->show();
-        plane->makeAmo();
+        plane->makeBullet();
         aim->show();
         for (int i = 0; i < enemies.size(); ++i) {
             threatObject* enemy = enemies.at(i);
@@ -95,6 +101,7 @@ void level::run() {
                     expMain->burn(plane);
                     show();      
                 }
+                enemy->reborn();
                 killed();
             }
             bulletList = enemy->getBulletList();

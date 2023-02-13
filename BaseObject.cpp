@@ -12,10 +12,10 @@ baseObject::~baseObject() {
         texture = NULL;
     }
 }
-bool baseObject::loadImage(const std::string& path) {
+void baseObject::loadImage(const std::string& path) {
     texture = loadTexture(path);
     SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
-    return (texture != NULL);
+    assert(texture != NULL);
 }
 
 void baseObject::show() {
