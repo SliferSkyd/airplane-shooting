@@ -28,13 +28,14 @@ public:
     SDL_Texture* getObject() {
         return texture;
     }
-    void setSpeed(const double& speed) {
+    void setSpeed(const int& speed) {
         this->speed = speed;
     }
 protected:
     SDL_Rect rect;
     SDL_Texture* texture; 
-    double angle, speed;
+    double angle;
+    int speed;
 };
 
 #endif

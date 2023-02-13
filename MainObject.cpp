@@ -12,8 +12,8 @@ void mainObject::handleMove() {
     int x, y;
     SDL_GetMouseState(&x, &y);
     y -= rect.h / 2;
-    if (rect.y < y) rect.y += min(5, y - rect.h);
-    else rect.y -= min(5, rect.y - y);
+    if (rect.y < y) rect.y += min(speed, y - rect.h);
+    else rect.y -= min(speed, rect.y - y);
 
     rect.y = max(rect.y, 10);
     rect.y = min(rect.y, SCREEN_HEIGHT - rect.h - 100);

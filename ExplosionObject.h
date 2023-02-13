@@ -22,6 +22,7 @@ public:
         return clip[i];
     }
     void show();
+    void burn(baseObject* object);
 private:
     int frame;
     SDL_Rect clip[4];

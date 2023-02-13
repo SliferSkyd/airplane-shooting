@@ -22,3 +22,10 @@ void explosionObject::show() {
     if (frame >= 4) frame = 0;
     applyTexture(texture, clip[frame].x, clip[frame].y, rect.x, rect.y, clip[frame].w, clip[frame].h);
 }
+
+void explosionObject::burn(baseObject* object) {
+    int x = object->getRect().x + object->getRect().w / 2 - clip[frame].w / 2;
+    int y = object->getRect().y + object->getRect().h / 2 - clip[frame].h / 2;;
+    setRect(x, y);
+    show();   
+}
