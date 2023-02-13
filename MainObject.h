@@ -22,11 +22,18 @@ public:
     std::vector<bulletObject*> getBulletList() const {
         return bulletList;
     }
+    void loadShieldImage(const std::string& path);
     void makeBullet();
-private:
-    int xVal, yVal;    
+    void showShield();
+    void activeShield();
+    bool checkShield() {
+        return hasShield;
+    }
+private:    
     std::vector<bulletObject*> bulletList;
-    std::chrono::system_clock::time_point lastBullet; 
+    std::chrono::system_clock::time_point lastBullet, lastShield; 
+    baseObject *shield = new baseObject();
+    bool hasShield = false;
 };
 
 #endif

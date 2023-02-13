@@ -11,6 +11,7 @@
 #include "ThreatObject.h"
 #include "ExplosionObject.h"
 #include "HPObject.h"
+#include "BonusObject.h"
 #include "target.h"
 
 using namespace std;
@@ -22,6 +23,8 @@ class level {
     explosionObject *expMain = new explosionObject(), *expThreat = new explosionObject();
     SDL_Texture *background;
     hpObject *HP = new hpObject();
+    bonusObject *heart = new bonusObject();
+    bonusObject *shield = new bonusObject();
     int bkg;
 public:
     void init(int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat);

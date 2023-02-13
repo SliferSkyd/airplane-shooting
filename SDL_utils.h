@@ -18,7 +18,7 @@ const double PI = acos(-1);
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
 static std::vector<Mix_Chunk*> sound;
-static std::vector<std::string> pathSound = {"laser", "sphere", "explosion", "bomb", "victory", "defeat"};
+static std::vector<std::string> pathSound = {"laser", "sphere", "explosion", "bomb", "victory", "defeat", "pop"};
 
 void logSDLError(std::ostream& os, const std::string &msg, bool fatal = false);
 void initSDL();

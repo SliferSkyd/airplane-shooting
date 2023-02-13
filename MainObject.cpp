@@ -64,3 +64,26 @@ void mainObject::makeBullet() {
         }
     }
 }
+
+void mainObject::loadShieldImage(const std::string& path) {
+    shield->loadImage(path);
+}
+
+void mainObject::showShield() {
+    if (!hasShield) return;
+    int x = rect.x + rect.w / 2 - shield->getRect().w / 2;
+    int y = rect.y + rect.h / 2 - shield->getRect().h / 2;
+    shield->setRect(x, y);
+    shield->show();
+    std::chrono::system_clock::time_point curTime = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = curTime - lastShield;
+    if (elapsed_seconds.count() > 5) {
+        hasShield = 0;
+        return;
+    }
+}
+
+void mainObject::activeShield() {
+    hasShield = true;
+    lastShield = std::chrono::system_clock::now();
+}

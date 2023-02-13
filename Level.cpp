@@ -6,6 +6,7 @@ void level::init(int idLevel, int numThreat, int numHasRadar, int speedMain, int
     vector<bool> hasRadar = randomTrueFalse(numHasRadar, numThreat - numHasRadar);
     background = loadTexture("data/image/bg4800.png");
     plane->loadImage("data/image/plane.png");
+    plane->loadShieldImage("data/image/shield.png");
     plane->setRect(10, Rand(10, SCREEN_HEIGHT - 100));
     plane->setSpeed(speedMain);
     int waitDistance = SCREEN_WIDTH / numThreat;
@@ -22,7 +23,12 @@ void level::init(int idLevel, int numThreat, int numHasRadar, int speedMain, int
     expMain->setClip();
     expThreat->loadImage("data/image/exp_threat.png");
     expThreat->setClip();
-    aim->loadImage("data/image/target.png");    
+    aim->loadImage("data/image/target.png");  
+
+    heart->loadImage("data/image/heart_item.png");  
+    shield->loadImage("data/image/shield_item.png");  
+    heart->setDuration(10); heart->setSpeed(5);
+    shield->setDuration(15); shield->setSpeed(5);
 }
 
 void level::killed() {
@@ -64,9 +70,24 @@ void level::run() {
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
         HP->show();
         plane->handleMove();
+        plane->showShield();
         plane->show();
         plane->makeBullet();
         aim->show();
+        if (heart->getIsMove() && checkCollision(heart->getRect(), plane->getRect())) {
+            playSound(6);
+            heart->setIsMove(false);
+            HP->addHP();
+        }
+        heart->handleMove();
+        if (heart->getIsMove()) heart->show();
+        if (shield->getIsMove() && checkCollision(shield->getRect(), plane->getRect())) {
+            playSound(6);
+            shield->setIsMove(false);
+            plane->activeShield();
+        }
+        shield->handleMove();
+        if (shield->getIsMove()) shield->show();
         for (int i = 0; i < enemies.size(); ++i) {
             threatObject* enemy = enemies.at(i);
             enemy->scan(plane->getRect().x, plane->getRect().y);
@@ -102,7 +123,7 @@ void level::run() {
                     show();      
                 }
                 enemy->reborn();
-                killed();
+                if (!plane->checkShield()) killed();
             }
             bulletList = enemy->getBulletList();
             for (int j = 0; j < bulletList.size(); ++j) {
@@ -115,12 +136,13 @@ void level::run() {
                         show();       
                     }
                     bulletList.erase(bulletList.begin() + j);
-                    killed();
+                    if (!plane->checkShield()) killed();
                 }
             }
             enemy->setBulletList(bulletList);
             enemies[i] = enemy;
         }
+        
         show();
         if (bkg < MAX_LEN - SCREEN_WIDTH) ++bkg;
         if (enemies.empty()) {
