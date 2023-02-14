@@ -58,7 +58,9 @@ void level::nextLevel() {
 void level::run() {
     SDL_Event e;
     bool quit = false;
+    double elapsedTime = 0;
     while (!quit) {
+        std::chrono::system_clock::time_point entryTime = std::chrono::system_clock::now();
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) {
                 quit = true;
@@ -70,10 +72,10 @@ void level::run() {
         clrscr();
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
         HP->show();
-        plane->handleMove();
+        plane->handleMove(elapsedTime);
         plane->showShield();
         plane->show();
-        plane->makeBullet();
+        plane->makeBullet(elapsedTime);
         aim->show();
         printText(0, ("Score: " + to_string(score)).c_str(), 100, 100, 0, 0, 0);
         if (heart->getIsMove() && checkCollision(heart->getRect(), plane->getRect())) {
@@ -81,22 +83,22 @@ void level::run() {
             heart->setIsMove(false);
             HP->addHP();
         }
-        heart->handleMove();
+        heart->handleMove(elapsedTime);
         if (heart->getIsMove()) heart->show();
         if (shield->getIsMove() && checkCollision(shield->getRect(), plane->getRect())) {
             playSound(6);
             shield->setIsMove(false);
             plane->activeShield();
         }
-        shield->handleMove();
+        shield->handleMove(elapsedTime);
         if (shield->getIsMove()) shield->show();
         for (int i = 0; i < enemies.size(); ++i) {
             threatObject* enemy = enemies.at(i);
             enemy->scan(plane->getRect().x, plane->getRect().y);
             enemy->initBullet();
-            enemy->handleMove();
+            enemy->handleMove(elapsedTime);
             enemy->show();
-            enemy->makeBullet();
+            enemy->makeBullet(elapsedTime);
             std::vector<bulletObject*> bulletList = plane->getBulletList();
             bool destroyed = false;
             for (int j = 0; j < bulletList.size(); ++j) {
@@ -152,5 +154,8 @@ void level::run() {
             nextLevel();
             return;
         }
+        std::chrono::system_clock::time_point exitTime = std::chrono::system_clock::now();
+        elapsedTime = (exitTime - entryTime).count() / 1e9;
+        cout << elapsedTime << '\n';
     }
 }

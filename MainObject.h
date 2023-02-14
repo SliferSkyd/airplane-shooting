@@ -14,7 +14,7 @@ class mainObject: public baseObject {
 public:
     mainObject();
     ~mainObject();
-    void handleMove();
+    void handleMove(const double& elapsedTime);
     void handleInputAction(SDL_Event events);
     void setBulletList(const std::vector<bulletObject*>& bulletList) {
         this->bulletList = bulletList;
@@ -23,7 +23,7 @@ public:
         return bulletList;
     }
     void loadShieldImage(const std::string& path);
-    void makeBullet();
+    void makeBullet(const double& elapsedTime);
     void showShield();
     void activeShield();
     bool checkShield() {

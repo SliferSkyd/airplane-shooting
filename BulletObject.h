@@ -17,7 +17,7 @@ public:
     };
     bulletObject();
     ~bulletObject();
-    void handleMove();
+    void handleMove(const double& elapsedTime);
     void handleInputAction(SDL_Event events);
 
     int getType() const {

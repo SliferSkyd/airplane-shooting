@@ -15,7 +15,7 @@ class threatObject: public baseObject {
 public:
     threatObject();
     ~threatObject();
-    void handleMove();
+    void handleMove(const double& elapsedTime);
     void initBullet();
     void setBulletList(const std::vector<bulletObject*>& bulletList) {
         this->bulletList = bulletList;
@@ -26,7 +26,7 @@ public:
     void setDuration(const double& duration) {
         this->duration = duration;
     }
-    void makeBullet();
+    void makeBullet(const double& elapsedTime);
     void reborn();
     void setHasRadar(const bool& hasRadar) {
         this->hasRadar = hasRadar;

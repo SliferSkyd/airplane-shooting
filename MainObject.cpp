@@ -8,12 +8,13 @@ mainObject::~mainObject() {
 
 }
 
-void mainObject::handleMove() {
+void mainObject::handleMove(const double& elapsedTime) {
+    int s = speed * elapsedTime;
     int x, y;
     SDL_GetMouseState(&x, &y);
     y -= rect.h / 2;
-    if (rect.y < y) rect.y += min(speed, y - rect.h);
-    else rect.y -= min(speed, rect.y - y);
+    if (rect.y < y) rect.y += min(s, y - rect.h);
+    else rect.y -= min(s, rect.y - y);
 
     rect.y = max(rect.y, 10);
     rect.y = min(rect.y, SCREEN_HEIGHT - rect.h - 100);
@@ -48,13 +49,13 @@ void mainObject::handleInputAction(SDL_Event events) {
     }
 }
 
-void mainObject::makeBullet() {
+void mainObject::makeBullet(const double& elapsedTime) {
     for (int i = 0; i < bulletList.size(); ++i) {
         bulletObject* bullet = bulletList.at(i);
         if (bullet != NULL) {
             if (bullet->getIsMove()) {
                 bullet->show();
-                bullet->handleMove();
+                bullet->handleMove(elapsedTime);
             } else {
                 if (bullet != NULL) {
                     bulletList.erase(bulletList.begin() + i);

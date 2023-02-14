@@ -13,7 +13,7 @@ class bonusObject: public baseObject {
 public:
     bonusObject();
     ~bonusObject();
-    void handleMove();
+    void handleMove(const double& elapsedTime);
     void setDuration(const double& duration) {
         this->duration = duration;
     }

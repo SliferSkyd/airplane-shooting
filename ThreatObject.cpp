@@ -8,8 +8,9 @@ threatObject::~threatObject() {
 
 }
 
-void threatObject::handleMove() {
-    rect.x -= speed * cos(angle); rect.y -= speed * sin(angle);
+void threatObject::handleMove(const double& elapsedTime) {
+    int s = speed * elapsedTime;
+    rect.x -= s * cos(angle); rect.y -= s * sin(angle);
     if (rect.x < 0) rect.x = SCREEN_WIDTH, rect.y = Rand(10, SCREEN_HEIGHT - 100);
 }
  
@@ -33,13 +34,13 @@ void threatObject::initBullet() {
     bulletList.push_back(bullet);
 }
 
-void threatObject::makeBullet() {
+void threatObject::makeBullet(const double& elapsedTime) {
     for (int i = 0; i < bulletList.size(); ++i) {
         bulletObject* bullet = bulletList.at(i);
         if (bullet != NULL) {
             if (bullet->getIsMove()) {
                 bullet->show();
-                bullet->handleMove();
+                bullet->handleMove(elapsedTime);
             } else {
                 if (bullet != NULL) {
                     bulletList.erase(bulletList.begin() + i);
