@@ -19,7 +19,7 @@ static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
 static std::vector<TTF_Font*> font;
 static std::vector<Mix_Chunk*> sound;
-static std::vector<std::string> pathFont = {"CreamySugar"};
+static std::vector<std::string> pathFont = {"BlackNorth"};
 static std::vector<std::string> pathSound = {"laser", "sphere", "explosion", "bomb", "victory", "defeat", "pop"};
 
 void logSDLError(std::ostream& os, const std::string &msg, bool fatal = false);
