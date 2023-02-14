@@ -29,11 +29,6 @@ void initSDL() {
     if (TTF_Init() < 0) {
         logSDLError(std::cout, "Error Initializing SDL_ttf", true);
     }
-    font.resize(pathFont.size());
-    for (int i = 0; i < pathFont.size(); ++i) {
-        font[i] = TTF_OpenFont(("data/font/" + pathFont[i] + ".ttf").c_str(), 24);
-        if (font[i] == NULL) logSDLError(std::cout, "Can not open Font text", true);
-    }
 }
 
 void quitSDL() {
@@ -88,9 +83,13 @@ void applyTexture(SDL_Texture* texture, int srcX, int srcY, int desX, int desY, 
 
 void applyTexture(SDL_Texture* texture, int x, int y) {
     SDL_Rect rect;
+    cout << "in: \n";
     SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+    cout << SDL_GetError() << endl;
+    
     rect.x = x, rect.y = y;
     SDL_RenderCopy(renderer, texture, NULL, &rect);
+    cout << "out\n";
 }
 
 void applyTexture(SDL_Texture* texture, int x, int y, double angle) {
@@ -138,9 +137,8 @@ std::vector<bool> randomTrueFalse(int numTrue, int numFalse) {
     return ret;
 }
 
-void printText(int type, const char* s, int x, int y, int a, int b, int c) {
-    SDL_Color color = {0, 0, 0};
-    SDL_Surface* text = TTF_RenderText_Solid(font[type], s, color); 
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, text);
+void applyText(TTF_Font *font, SDL_Color color, const std::string& s, int x, int y) {
+    SDL_Surface* surface = TTF_RenderText_Solid(font, s.c_str(), color); 
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     applyTexture(texture, x, y);
 }

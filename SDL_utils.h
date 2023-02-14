@@ -17,9 +17,7 @@ const double PI = acos(-1);
 
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
-static std::vector<TTF_Font*> font;
 static std::vector<Mix_Chunk*> sound;
-static std::vector<std::string> pathFont = {"BlackNorth"};
 static std::vector<std::string> pathSound = {"laser", "sphere", "explosion", "bomb", "victory", "defeat", "pop"};
 
 void logSDLError(std::ostream& os, const std::string &msg, bool fatal = false);
@@ -39,6 +37,6 @@ bool checkCollision(const SDL_Rect& rect1, const SDL_Rect& rect2);
 void messageBox(string message);
 void playSound(int type);
 std::vector<bool> randomTrueFalse(int numTrue, int numFalse);
-void printText(int type, const char* s, int x, int y, int a, int b, int c);
+void applyText(TTF_Font *font, SDL_Color color, const std::string& s, int x, int y);
 
 #endif

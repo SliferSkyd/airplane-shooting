@@ -12,6 +12,7 @@
 #include "ExplosionObject.h"
 #include "HPObject.h"
 #include "BonusObject.h"
+#include "TextObject.h"
 #include "target.h"
 
 using namespace std;
@@ -25,6 +26,8 @@ class level {
     hpObject *HP = new hpObject();
     bonusObject *heart = new bonusObject();
     bonusObject *shield = new bonusObject();
+    textObject *scoreText = new textObject();
+
     int bkg, score;
 public:
     void init(int lastScore, int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat);

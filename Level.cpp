@@ -3,7 +3,7 @@
 void level::init(int lastScore, int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat) {
     HP->loadImage("data/image/HP0.png", "data/image/HP1.png");
     assert(numThreat >= numHasRadar);
-    vector<bool> hasRadar = randomTrueFalse(numHasRadar, numThreat - numHasRadar);
+    std::vector<bool> hasRadar = randomTrueFalse(numHasRadar, numThreat - numHasRadar);
     background = loadTexture("data/image/bg4800.png");
     plane->loadImage("data/image/plane.png");
     plane->loadShieldImage("data/image/shield.png");
@@ -29,7 +29,9 @@ void level::init(int lastScore, int idLevel, int numThreat, int numHasRadar, int
     shield->loadImage("data/image/shield_item.png");  
     heart->setDuration(10); heart->setSpeed(300);
     shield->setDuration(15); shield->setSpeed(300);
-    score = lastScore;
+    score = lastScore, bkg = 0;
+    scoreText->loadFont("data/font/blacknorth.ttf", 24);
+    scoreText->setColor(textObject::BLACK);
 }
 
 void level::killed() {
@@ -43,6 +45,8 @@ void level::gameOver() {
     clrscr();
     applyTexture(background, bkg, 0, SCREEN_WIDTH);
     HP->show();
+    scoreText->setText(("Score: " + to_string(score)).c_str());
+    scoreText->show(800, 10);
     show();
     playSound(5);
     messageBox("Siuuuu");
@@ -52,6 +56,12 @@ void level::gameOver() {
 
 void level::nextLevel() {
     playSound(4);
+    clrscr();
+    applyTexture(background, bkg, 0, SCREEN_WIDTH);
+    HP->show();
+    scoreText->setText(("Score: " + to_string(score)).c_str());
+    scoreText->show(800, 10);
+    show();
     messageBox("Congratulations! You won!");
 }
 
@@ -77,7 +87,8 @@ void level::run() {
         plane->show();
         plane->makeBullet(elapsedTime);
         aim->show();
-        printText(0, ("Score: " + to_string(score)).c_str(), 100, 100, 0, 0, 0);
+        scoreText->setText(("Score: " + to_string(score)).c_str());
+        scoreText->show(800, 10);
         if (heart->getIsMove() && checkCollision(heart->getRect(), plane->getRect())) {
             playSound(6);
             heart->setIsMove(false);
