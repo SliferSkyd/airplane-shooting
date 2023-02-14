@@ -10,6 +10,10 @@ mainObject::~mainObject() {
 
 void mainObject::handleMove(const double& elapsedTime) {
     int s = speed * elapsedTime;
+    if (won) {
+        rect.x += s;
+        return;
+    }
     int x, y;
     SDL_GetMouseState(&x, &y);
     y -= rect.h / 2;

@@ -3,7 +3,7 @@
 void level::init(int lastScore, int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat) {
     HP->loadImage("data/image/HP0.png", "data/image/HP1.png");
     assert(numThreat >= numHasRadar);
-    std::vector<bool> hasRadar = randomTrueFalse(numHasRadar, numThreat - numHasRadar);
+    vector<bool> hasRadar = randomTrueFalse(numHasRadar, numThreat - numHasRadar);
     background = loadTexture("data/image/bg4800.png");
     plane->loadImage("data/image/plane.png");
     plane->loadShieldImage("data/image/shield.png");
@@ -161,12 +161,11 @@ void level::run() {
         }
         show();
         if (bkg < MAX_LEN - SCREEN_WIDTH) ++bkg;
-        if (enemies.empty()) {
-            nextLevel();
-            return;
-        }
+        if (enemies.empty()) plane->setWon();
+        if (plane->getRect().x > SCREEN_WIDTH) break;
         std::chrono::system_clock::time_point exitTime = std::chrono::system_clock::now();
         elapsedTime = (exitTime - entryTime).count() / 1e9;
         // cout << elapsedTime << '\n';
     }
+    nextLevel();
 }

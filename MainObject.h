@@ -29,11 +29,15 @@ public:
     bool checkShield() {
         return hasShield;
     }
+    void setWon() {
+        won = true;
+    }
 private:    
     std::vector<bulletObject*> bulletList;
     std::chrono::system_clock::time_point lastBullet, lastShield; 
     baseObject *shield = new baseObject();
     bool hasShield = false;
+    bool won = false;
 };
 
 #endif
