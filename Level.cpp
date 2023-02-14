@@ -1,6 +1,6 @@
 #include "Level.h"
 
-void level::init(int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat) {
+void level::init(int lastScore, int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat) {
     HP->loadImage("data/image/HP0.png", "data/image/HP1.png");
     assert(numThreat >= numHasRadar);
     vector<bool> hasRadar = randomTrueFalse(numHasRadar, numThreat - numHasRadar);
@@ -29,6 +29,7 @@ void level::init(int idLevel, int numThreat, int numHasRadar, int speedMain, int
     shield->loadImage("data/image/shield_item.png");  
     heart->setDuration(10); heart->setSpeed(5);
     shield->setDuration(15); shield->setSpeed(5);
+    score = lastScore;
 }
 
 void level::killed() {
@@ -74,6 +75,7 @@ void level::run() {
         plane->show();
         plane->makeBullet();
         aim->show();
+        printText(0, ("Score: " + to_string(score)).c_str(), 100, 100, 0, 0, 0);
         if (heart->getIsMove() && checkCollision(heart->getRect(), plane->getRect())) {
             playSound(6);
             heart->setIsMove(false);
@@ -106,6 +108,7 @@ void level::run() {
                         expThreat->burn(enemy);  
                         show();         
                     }
+                    ++score;
                     if (bkg < MAX_LEN - SCREEN_WIDTH) enemy->reborn();
                     else enemies.erase(enemies.begin() + i);
                     bulletList.erase(bulletList.begin() + j);
@@ -124,6 +127,7 @@ void level::run() {
                 }
                 enemy->reborn();
                 if (!plane->checkShield()) killed();
+                else ++score;
             }
             bulletList = enemy->getBulletList();
             for (int j = 0; j < bulletList.size(); ++j) {
@@ -142,7 +146,6 @@ void level::run() {
             enemy->setBulletList(bulletList);
             enemies[i] = enemy;
         }
-        
         show();
         if (bkg < MAX_LEN - SCREEN_WIDTH) ++bkg;
         if (enemies.empty()) {

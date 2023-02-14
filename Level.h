@@ -25,9 +25,9 @@ class level {
     hpObject *HP = new hpObject();
     bonusObject *heart = new bonusObject();
     bonusObject *shield = new bonusObject();
-    int bkg;
+    int bkg, score;
 public:
-    void init(int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat);
+    void init(int lastScore, int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat);
     void gameOver();
     void nextLevel();
     void run();

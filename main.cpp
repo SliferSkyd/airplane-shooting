@@ -15,7 +15,7 @@ int main(int argc, char ** argv) {
     srand(time(NULL));
     initSDL();
     level test;
-    test.init(0, 2, 1, 5, 4);
+    test.init(0, 0, 2, 1, 5, 4);
     test.run();
     quitSDL();
     return 0;
