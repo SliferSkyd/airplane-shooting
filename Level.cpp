@@ -27,8 +27,8 @@ void level::init(int lastScore, int idLevel, int numThreat, int numHasRadar, int
 
     heart->loadImage("data/image/heart_item.png");  
     shield->loadImage("data/image/shield_item.png");  
-    heart->setDuration(10); heart->setSpeed(5);
-    shield->setDuration(15); shield->setSpeed(5);
+    heart->setDuration(10); heart->setSpeed(300);
+    shield->setDuration(15); shield->setSpeed(300);
     score = lastScore;
 }
 
@@ -156,6 +156,6 @@ void level::run() {
         }
         std::chrono::system_clock::time_point exitTime = std::chrono::system_clock::now();
         elapsedTime = (exitTime - entryTime).count() / 1e9;
-        cout << elapsedTime << '\n';
+        // cout << elapsedTime << '\n';
     }
 }
