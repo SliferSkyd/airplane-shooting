@@ -83,13 +83,9 @@ void applyTexture(SDL_Texture* texture, int srcX, int srcY, int desX, int desY, 
 
 void applyTexture(SDL_Texture* texture, int x, int y) {
     SDL_Rect rect;
-    cout << "in: \n";
     SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
-    cout << SDL_GetError() << endl;
-    
     rect.x = x, rect.y = y;
     SDL_RenderCopy(renderer, texture, NULL, &rect);
-    cout << "out\n";
 }
 
 void applyTexture(SDL_Texture* texture, int x, int y, double angle) {
@@ -100,7 +96,11 @@ void applyTexture(SDL_Texture* texture, int x, int y, double angle) {
     SDL_RenderCopyEx(renderer, texture, NULL, &rect, angle, NULL, SDL_FLIP_NONE);
 }
 
-void clrscr() {
+void applyTexture(SDL_Texture* texture, SDL_Rect rect) {
+    SDL_RenderCopy(renderer, texture, NULL, &rect);
+}
+
+void clearScreen() {
     SDL_RenderClear(renderer);
 }
 
@@ -118,12 +118,16 @@ bool checkCollision(const SDL_Rect& rect1, const SDL_Rect& rect2) {
     return true;
 }
 
+bool checkInside(const SDL_Rect& rect, const int& x, const int& y) {
+    return (rect.x <= x && x <= rect.x + rect.w && rect.y <= y && y <= rect.y + rect.h);
+}
+
 void messageBox(string message) {
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Game Over!", message.c_str(), window);
 }
 
-void playSound(int type) {
-    Mix_PlayChannel(-1, sound[type], 0);
+void playSound(int type, int loops = 0) {
+    Mix_PlayChannel(-1, sound[type], loops);
 }
 
 std::vector<bool> randomTrueFalse(int numTrue, int numFalse) {

@@ -18,7 +18,7 @@ const double PI = acos(-1);
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
 static std::vector<Mix_Chunk*> sound;
-static std::vector<std::string> pathSound = {"laser", "sphere", "explosion", "bomb", "victory", "defeat", "pop"};
+static std::vector<std::string> pathSound = {"laser", "sphere", "explosion", "bomb", "victory", "defeat", "pop", "theme"};
 
 void logSDLError(std::ostream& os, const std::string &msg, bool fatal = false);
 void initSDL();
@@ -30,12 +30,14 @@ void applyTexture(SDL_Texture* texture, int src, int des, int len);
 void applyTexture(SDL_Texture* texture, int srcX, int srcY, int desX, int desY, int w, int h);
 void applyTexture(SDL_Texture* texture, int x, int y);
 void applyTexture(SDL_Texture* texture, int x, int y, double angle);
-void clrscr();
+void applyTexture(SDL_Texture* texture, SDL_Rect rect);
+void clearScreen();
 void show();
 int Rand(int L, int R);
 bool checkCollision(const SDL_Rect& rect1, const SDL_Rect& rect2);
+bool checkInside(const SDL_Rect& rect, const int& x, const int& y);
 void messageBox(string message);
-void playSound(int type);
+void playSound(int type, int loops = 0);
 std::vector<bool> randomTrueFalse(int numTrue, int numFalse);
 void applyText(TTF_Font *font, SDL_Color color, const std::string& s, int x, int y);
 

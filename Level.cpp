@@ -42,7 +42,7 @@ void level::killed() {
 }
 
 void level::gameOver() {
-    clrscr();
+    clearScreen();
     applyTexture(background, bkg, 0, SCREEN_WIDTH);
     HP->show();
     scoreText->setText(("Score: " + to_string(score)).c_str());
@@ -56,7 +56,7 @@ void level::gameOver() {
 
 void level::nextLevel() {
     playSound(4);
-    clrscr();
+    clearScreen();
     applyTexture(background, bkg, 0, SCREEN_WIDTH);
     HP->show();
     scoreText->setText(("Score: " + to_string(score)).c_str());
@@ -66,20 +66,17 @@ void level::nextLevel() {
 }
 
 void level::run() {
+    playSound(7, -1);
     SDL_Event e;
-    bool quit = false;
     double elapsedTime = 0;
-    while (!quit) {
+    while (1) {
         std::chrono::system_clock::time_point entryTime = std::chrono::system_clock::now();
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) {
-                quit = true;
-                break;
-            }
+            if (e.type == SDL_QUIT) exit(1);
             plane->handleInputAction(e);
             aim->handleInputAction(e);
         }
-        clrscr();
+        clearScreen();
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
         HP->show();
         plane->handleMove(elapsedTime);
