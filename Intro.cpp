@@ -1,25 +1,25 @@
 #include "Intro.h"
 
-const int WIDTH_OFF = 200;
-const int HEIGHT_OFF = 133;
-const int WIDTH_ON = 250;
-const int HEIGHT_ON = 167;
+const int WIDTH_OFF = 150;
+const int HEIGHT_OFF = 49;
+const int WIDTH_ON = 200;
+const int HEIGHT_ON = 65;
 
 int intro::run() {
     SDL_Texture *background = loadTexture("data/image/bg.png");
     buttonObject *start = new buttonObject();
     start->loadImage("data/image/start_button.png");
-    start->setPosition(100, 100);
+    start->setPosition(500, 250);
     start->setSize(WIDTH_OFF, HEIGHT_OFF, WIDTH_ON, HEIGHT_ON);
 
     buttonObject *help = new buttonObject();
     help->loadImage("data/image/help_button.png");
-    help->setPosition(100, 250);
+    help->setPosition(500, 325);
     help->setSize(WIDTH_OFF, HEIGHT_OFF, WIDTH_ON, HEIGHT_ON);
     
     buttonObject *quit = new buttonObject();
     quit->loadImage("data/image/quit_button.png");
-    quit->setPosition(100, 400);
+    quit->setPosition(500, 400);
     quit->setSize(WIDTH_OFF, HEIGHT_OFF, WIDTH_ON, HEIGHT_ON);
     
     target *aim = new target();
@@ -40,11 +40,11 @@ int intro::run() {
         
         clearScreen();
         applyBackground(background);
-        aim->show();
+        
         start->show();
         help->show();
         quit->show();
-        
+        aim->show();
         show();
     }
 }

@@ -9,7 +9,7 @@ void level::init(int lastScore, int idLevel, int numThreat, int numHasRadar, int
     plane->loadShieldImage("data/image/shield.png");
     plane->setRect(10, Rand(10, SCREEN_HEIGHT - 100));
     plane->setSpeed(speedMain);
-    int waitDistance = SCREEN_WIDTH / numThreat;
+    int waitDistance = (numThreat ? SCREEN_WIDTH / numThreat : 0);
     for (int i = 0; i < numThreat; ++i) {
         threatObject* enemy = new threatObject();
         enemy->setRect(SCREEN_WIDTH - 50 + waitDistance * i, Rand(10, SCREEN_HEIGHT - 100));
@@ -34,9 +34,11 @@ void level::init(int lastScore, int idLevel, int numThreat, int numHasRadar, int
     scoreText->setColor(textObject::BLACK);
 }
 
-void level::killed() {
+void level::shooted() {
     HP->subHP();
     if (HP->getHP() == 0) {
+        haltSound(7);
+        endGame();
         gameOver();
     }
 }
@@ -54,18 +56,20 @@ void level::gameOver() {
     exit(1);
 }
 
-void level::nextLevel() {
-    playSound(4);
-    clearScreen();
-    applyTexture(background, bkg, 0, SCREEN_WIDTH);
-    HP->show();
-    scoreText->setText(("Score: " + to_string(score)).c_str());
-    scoreText->show(800, 10);
-    show();
-    messageBox("Congratulations! You won!");
+void level::endGame() {
+    for (int i = 255; i >= 0; i -= 3) {
+        SDL_SetTextureAlphaMod(background, i);
+        clearScreen();
+        applyTexture(background, bkg, 0, SCREEN_WIDTH);
+        HP->show();
+        aim->show();
+        scoreText->setText(("Score: " + to_string(score)).c_str());
+        scoreText->show(800, 10);
+        show();
+    }
 }
 
-void level::run() {
+int level::run() {
     playSound(7, -1);
     SDL_Event e;
     double elapsedTime = 0;
@@ -136,7 +140,7 @@ void level::run() {
                     show();      
                 }
                 enemy->reborn();
-                if (!plane->checkShield()) killed();
+                if (!plane->checkShield()) shooted();
                 else ++score;
             }
             bulletList = enemy->getBulletList();
@@ -150,7 +154,7 @@ void level::run() {
                         show();       
                     }
                     bulletList.erase(bulletList.begin() + j);
-                    if (!plane->checkShield()) killed();
+                    if (!plane->checkShield()) shooted();
                 }
             }
             enemy->setBulletList(bulletList);
@@ -164,5 +168,8 @@ void level::run() {
         elapsedTime = (exitTime - entryTime).count() / 1e9;
         // cout << elapsedTime << '\n';
     }
-    nextLevel();
+    haltSound(7);
+    playSound(4);
+    endGame();
+    return score;
 }

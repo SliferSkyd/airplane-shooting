@@ -32,9 +32,9 @@ class level {
 public:
     void init(int lastScore, int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat);
     void gameOver();
-    void nextLevel();
-    void run();
-    void killed();
+    int run();
+    void shooted();
+    void endGame();
 };
 
 #endif

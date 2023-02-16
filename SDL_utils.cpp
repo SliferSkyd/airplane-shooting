@@ -29,6 +29,7 @@ void initSDL() {
     if (TTF_Init() < 0) {
         logSDLError(std::cout, "Error Initializing SDL_ttf", true);
     }
+    Mix_AllocateChannels(pathSound.size());
 }
 
 void quitSDL() {
@@ -126,8 +127,16 @@ void messageBox(string message) {
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Game Over!", message.c_str(), window);
 }
 
-void playSound(int type, int loops = 0) {
-    Mix_PlayChannel(-1, sound[type], loops);
+void playSound(int type) {
+    Mix_PlayChannel(type, sound[type], 0);
+}
+
+void playSound(int type, int loops) {
+    Mix_PlayChannel(type, sound[type], loops);
+}
+
+void haltSound(int type) {
+    Mix_HaltChannel(type);
 }
 
 std::vector<bool> randomTrueFalse(int numTrue, int numFalse) {
