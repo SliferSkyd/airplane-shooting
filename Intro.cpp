@@ -26,7 +26,6 @@ int intro::run() {
     aim->loadImage("data/image/target.png");
     SDL_Event e;
     while (1) {
-        std::chrono::system_clock::time_point entryTime = std::chrono::system_clock::now();
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) exit(1);
             if (start->isClicked(e)) return 1;
