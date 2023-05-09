@@ -28,12 +28,13 @@ class level {
     bonusObject *shield = new bonusObject();
     textObject *scoreText = new textObject();
 
-    int bkg, score;
+    int bkg, score, idLevel;
 public:
     void init(int lastScore, int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat);
     void gameOver();
-    int run();
-    void shooted();
+    int run(int &curScore);
+    int shooted();
+    void startGame();
     void endGame();
 };
 

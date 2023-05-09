@@ -20,6 +20,6 @@ void textObject::loadFont(const std::string& path, const int& size) {
     font = TTF_OpenFont(path.c_str(), size);
 }
 
-void textObject::show(const int& x, const int& y) {
-    applyText(font, color, text, x, y);
+void textObject::show(const int& x, const int& y, int opacity) {
+    applyText(font, color, text, x, y, opacity);
 }

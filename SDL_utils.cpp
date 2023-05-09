@@ -24,7 +24,7 @@ void initSDL() {
     sound.resize(pathSound.size());
     for (int i = 0; i < pathSound.size(); ++i) {
         sound[i] = Mix_LoadWAV(("data/sound/" + pathSound[i] + ".wav").c_str());
-        if (sound[i] == NULL) logSDLError(std::cout, "Can not open Audio", true);
+        if (sound[i] == NULL) logSDLError(std::cout, ("Can not open Audio: " + pathSound[i]).c_str(), true);
     }
     if (TTF_Init() < 0) {
         logSDLError(std::cout, "Error Initializing SDL_ttf", true);
@@ -150,8 +150,9 @@ std::vector<bool> randomTrueFalse(int numTrue, int numFalse) {
     return ret;
 }
 
-void applyText(TTF_Font *font, SDL_Color color, const std::string& s, int x, int y) {
+void applyText(TTF_Font *font, SDL_Color color, const std::string& s, int x, int y, int opacity) {
     SDL_Surface* surface = TTF_RenderText_Solid(font, s.c_str(), color); 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_SetTextureAlphaMod(texture, opacity);
     applyTexture(texture, x, y);
 }

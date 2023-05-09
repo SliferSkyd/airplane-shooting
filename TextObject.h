@@ -22,7 +22,7 @@ public:
         this->text = text;
     }
     void setColor(const int& type);
-    void show(const int& x, const int& y);
+    void show(const int& x, const int& y, int opacity = 255);
     void loadFont(const std::string& path, const int& size);
 private: 
     std::string text;

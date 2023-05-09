@@ -1,6 +1,7 @@
 #include "Level.h"
 
 void level::init(int lastScore, int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat) {
+    this->idLevel = idLevel;
     HP->loadImage("data/image/HP0.png", "data/image/HP1.png");
     assert(numThreat >= numHasRadar);
     vector<bool> hasRadar = randomTrueFalse(numHasRadar, numThreat - numHasRadar);
@@ -34,13 +35,10 @@ void level::init(int lastScore, int idLevel, int numThreat, int numHasRadar, int
     scoreText->setColor(textObject::BLACK);
 }
 
-void level::shooted() {
+int level::shooted() {
     HP->subHP();
-    if (HP->getHP() == 0) {
-        haltSound(7);
-        endGame();
-        gameOver();
-    }
+    if (HP->getHP() == 0) return 1;        
+    return 0;
 }
 
 void level::gameOver() {
@@ -51,9 +49,24 @@ void level::gameOver() {
     scoreText->show(800, 10);
     show();
     playSound(5);
-    messageBox("Siuuuu");
-    quitSDL();
-    exit(1);
+}
+
+void level::startGame() {
+    textObject *levelText = new textObject();
+    levelText->loadFont("data/font/DripOctober.ttf", 150);
+    levelText->setText(("Level " + to_string(idLevel)).c_str());
+    levelText->setColor(textObject::RED);
+    for (int i = 0; i < 256; i += 3) {
+        SDL_SetTextureAlphaMod(background, i);
+        clearScreen();
+        applyTexture(background, bkg, 0, SCREEN_WIDTH);
+        HP->show();
+        aim->show();
+        scoreText->setText(("Score: " + to_string(score)).c_str());
+        scoreText->show(800, 10);
+        levelText->show(250, 200, 255 - i);
+        show();
+    }
 }
 
 void level::endGame() {
@@ -69,10 +82,11 @@ void level::endGame() {
     }
 }
 
-int level::run() {
-    playSound(7, -1);
+int level::run(int& curScore) {
+    playSound(theme, -1);
     SDL_Event e;
     double elapsedTime = 0;
+    startGame();
     while (1) {
         std::chrono::system_clock::time_point entryTime = std::chrono::system_clock::now();
         while (SDL_PollEvent(&e)) {
@@ -91,14 +105,14 @@ int level::run() {
         scoreText->setText(("Score: " + to_string(score)).c_str());
         scoreText->show(800, 10);
         if (heart->getIsMove() && checkCollision(heart->getRect(), plane->getRect())) {
-            playSound(6);
+            playSound(pop);
             heart->setIsMove(false);
             HP->addHP();
         }
         heart->handleMove(elapsedTime);
         if (heart->getIsMove()) heart->show();
         if (shield->getIsMove() && checkCollision(shield->getRect(), plane->getRect())) {
-            playSound(6);
+            playSound(pop);
             shield->setIsMove(false);
             plane->activeShield();
         }
@@ -116,7 +130,7 @@ int level::run() {
             for (int j = 0; j < bulletList.size(); ++j) {
                 bulletObject* bullet = bulletList.at(j);
                 if (checkCollision(bullet->getRect(), enemy->getRect())) {
-                    playSound(2);
+                    playSound(explosion);
                     for (int k = 0; k < 4; ++k) {
                         expThreat->setFrame(k);
                         expThreat->burn(enemy);  
@@ -133,28 +147,43 @@ int level::run() {
             plane->setBulletList(bulletList);
             if (destroyed) continue;
             if (checkCollision(enemy->getRect(), plane->getRect())) {
-                playSound(3);
+                playSound(bomb);
                 for (int j = 0; j < 4; ++j) {
                     expMain->setFrame(j);
                     expMain->burn(plane);
                     show();      
                 }
                 enemy->reborn();
-                if (!plane->checkShield()) shooted();
-                else ++score;
+                if (!plane->checkShield()) {
+                    if (shooted()) {
+                        curScore = score;
+                        haltSound(theme);
+                        playSound(death);
+                        endGame();
+                        return 0; // lost
+                    }
+                } else ++score;
             }
             bulletList = enemy->getBulletList();
             for (int j = 0; j < bulletList.size(); ++j) {
                 bulletObject* bullet = bulletList.at(j);
                 if (checkCollision(bullet->getRect(), plane->getRect())) {
-                    playSound(3);
+                    playSound(bomb);
                     for (int k = 0; k < 4; ++k) {
                         expMain->setFrame(k);
                         expMain->burn(plane);
                         show();       
                     }
                     bulletList.erase(bulletList.begin() + j);
-                    if (!plane->checkShield()) shooted();
+                    if (!plane->checkShield()) {
+                        if (shooted()) {
+                            curScore = score;
+                            haltSound(theme);
+                            playSound(death);
+                            endGame();
+                            return 0; // lost
+                        }
+                    }
                 }
             }
             enemy->setBulletList(bulletList);
@@ -168,8 +197,8 @@ int level::run() {
         elapsedTime = (exitTime - entryTime).count() / 1e9;
         // cout << elapsedTime << '\n';
     }
-    haltSound(7);
-    playSound(4);
+    haltSound(theme);
+    playSound(success);
     endGame();
-    return score;
+    return 1; // won
 }

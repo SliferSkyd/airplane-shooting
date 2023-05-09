@@ -18,7 +18,13 @@ const double PI = acos(-1);
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
 static std::vector<Mix_Chunk*> sound;
-static std::vector<std::string> pathSound = {"laser", "sphere", "explosion", "bomb", "victory", "defeat", "pop", "theme", "menu"};
+static std::vector<std::string> pathSound = {"laser", "sphere", "explosion", "bomb", "victory", "defeat", "pop", "theme", "menu", "siuu", "success", "death"};
+
+enum soundEffect {
+    laser = 0, sphere = 1, explosion = 2, bomb = 3, victory = 4, 
+    defeat = 5, pop = 6, theme = 7, menu = 8, siuu = 9, 
+    success = 10, death = 11
+};
 
 void logSDLError(std::ostream& os, const std::string &msg, bool fatal = false);
 void initSDL();
@@ -41,6 +47,6 @@ void playSound(int type);
 void playSound(int type, int loops);
 void haltSound(int type);
 std::vector<bool> randomTrueFalse(int numTrue, int numFalse);
-void applyText(TTF_Font *font, SDL_Color color, const std::string& s, int x, int y);
+void applyText(TTF_Font *font, SDL_Color color, const std::string& s, int x, int y, int opacity);
 
 #endif
