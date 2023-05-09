@@ -1,15 +1,9 @@
 #ifndef TEXT_OBJECT__H
 #define TEXT_OBJECT__H
 
-#include <bits/stdc++.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_ttf.h>
 #include "BaseObject.h"
 
 using namespace std;
-
 class textObject: public baseObject {
 public:
     enum textColor {

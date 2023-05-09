@@ -1,11 +1,6 @@
 #ifndef THREAT_OBJECT__H
 #define THREAT_OBJECT__H
 
-#include <bits/stdc++.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_ttf.h>
 #include "BaseObject.h"
 #include "BulletObject.h"
 

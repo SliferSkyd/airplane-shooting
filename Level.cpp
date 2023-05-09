@@ -5,7 +5,7 @@ void level::init(int lastScore, int idLevel, int numThreat, int numHasRadar, int
     HP->loadImage("data/image/HP0.png", "data/image/HP1.png");
     assert(numThreat >= numHasRadar);
     vector<bool> hasRadar = randomTrueFalse(numHasRadar, numThreat - numHasRadar);
-    background = loadTexture("data/image/bg4800.png");
+    background = loadTexture(("data/image/bg" + to_string(idLevel) + ".png").c_str());
     plane->loadImage("data/image/plane.png");
     plane->loadShieldImage("data/image/shield.png");
     plane->setRect(10, Rand(10, SCREEN_HEIGHT - 100));
@@ -14,7 +14,7 @@ void level::init(int lastScore, int idLevel, int numThreat, int numHasRadar, int
     for (int i = 0; i < numThreat; ++i) {
         threatObject* enemy = new threatObject();
         enemy->setRect(SCREEN_WIDTH - 50 + waitDistance * i, Rand(10, SCREEN_HEIGHT - 100));
-        enemy->loadImage("data/image/enemy.png");
+        enemy->loadImage(("data/image/enemy" + to_string(Rand(0, 7)) + ".png").c_str());
         enemy->setSpeed(speedThreat);
         enemy->setDuration(2);
         enemy->setHasRadar(hasRadar[i]);
@@ -56,6 +56,7 @@ void level::startGame() {
     levelText->loadFont("data/font/DripOctober.ttf", 150);
     levelText->setText(("Level " + to_string(idLevel)).c_str());
     levelText->setColor(textObject::RED);
+    playSound(ready);
     for (int i = 0; i < 256; i += 3) {
         SDL_SetTextureAlphaMod(background, i);
         clearScreen();
@@ -82,7 +83,7 @@ void level::endGame() {
     }
 }
 
-int level::run(int& curScore) {
+int level::run(int& newScore) {
     playSound(theme, -1);
     SDL_Event e;
     double elapsedTime = 0;
@@ -156,7 +157,7 @@ int level::run(int& curScore) {
                 enemy->reborn();
                 if (!plane->checkShield()) {
                     if (shooted()) {
-                        curScore = score;
+                        newScore = score;
                         haltSound(theme);
                         playSound(death);
                         endGame();
@@ -177,7 +178,7 @@ int level::run(int& curScore) {
                     bulletList.erase(bulletList.begin() + j);
                     if (!plane->checkShield()) {
                         if (shooted()) {
-                            curScore = score;
+                            newScore = score;
                             haltSound(theme);
                             playSound(death);
                             endGame();
@@ -198,7 +199,8 @@ int level::run(int& curScore) {
         // cout << elapsedTime << '\n';
     }
     haltSound(theme);
-    playSound(success);
+    playSound(siuu);
+    newScore = score;
     endGame();
     return 1; // won
 }

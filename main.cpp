@@ -1,4 +1,3 @@
-#include <bits/stdc++.h>
 #include "ButtonObject.h"
 #include "Level.h"
 
@@ -53,22 +52,17 @@ int runIntroScreen() {
 }
 
 int runScreenVictory() {
-    const int WIDTH_OFF = 150;
-    const int HEIGHT_OFF = 49;
-    const int WIDTH_ON = 200;
+    const int WIDTH_OFF = 271;
+    const int HEIGHT_OFF = 50;
+    const int WIDTH_ON = 353;
     const int HEIGHT_ON = 65;
 
     playSound(victory, -1);
     SDL_Texture *background = loadTexture("data/image/victory.png");
     buttonObject *replay = new buttonObject();
-    replay->loadImage("data/image/replay.png");
-    replay->setPosition(100, 450);
+    replay->loadImage("data/image/replay_victory.png");
+    replay->setPosition(800, 450);
     replay->setSize(WIDTH_OFF, HEIGHT_OFF, WIDTH_ON, HEIGHT_ON);
-
-    buttonObject *quit = new buttonObject();
-    quit->loadImage("data/image/quit.png");
-    quit->setPosition(900, 450);
-    quit->setSize(WIDTH_OFF, HEIGHT_OFF, WIDTH_ON, HEIGHT_ON);
 
     target *aim = new target();
     aim->loadImage("data/image/target.png");
@@ -80,17 +74,14 @@ int runScreenVictory() {
                 haltSound(victory);
                 return 1;
             }
-            if (quit->isClicked(e)) exit(1);
             aim->handleInputAction(e);
         }
         replay->handleMove(aim->getRect());
-        quit->handleMove(aim->getRect());
         
         clearScreen();
         applyBackground(background);
         
         replay->show();
-        quit->show();
         aim->show();
         show();
     }
@@ -98,22 +89,17 @@ int runScreenVictory() {
 
 
 int runScreenDefeat() {
-    const int WIDTH_OFF = 150;
-    const int HEIGHT_OFF = 49;
-    const int WIDTH_ON = 200;
+    const int WIDTH_OFF = 271;
+    const int HEIGHT_OFF = 50;
+    const int WIDTH_ON = 353;
     const int HEIGHT_ON = 65;
 
     playSound(defeat, -1);
     SDL_Texture *background = loadTexture("data/image/defeat.png");
     buttonObject *replay = new buttonObject();
-    replay->loadImage("data/image/replay.png");
-    replay->setPosition(100, 450);
+    replay->loadImage("data/image/replay_defeat.png");
+    replay->setPosition(800, 450);
     replay->setSize(WIDTH_OFF, HEIGHT_OFF, WIDTH_ON, HEIGHT_ON);
-
-    buttonObject *quit = new buttonObject();
-    quit->loadImage("data/image/quit.png");
-    quit->setPosition(900, 450);
-    quit->setSize(WIDTH_OFF, HEIGHT_OFF, WIDTH_ON, HEIGHT_ON);
 
     target *aim = new target();
     aim->loadImage("data/image/target.png");
@@ -125,17 +111,14 @@ int runScreenDefeat() {
                 haltSound(defeat);
                 return 1;
             }
-            if (quit->isClicked(e)) exit(1);
             aim->handleInputAction(e);
         }
         replay->handleMove(aim->getRect());
-        quit->handleMove(aim->getRect());
         
         clearScreen();
         applyBackground(background);
         
         replay->show();
-        quit->show();
         aim->show();
         show();
     }
