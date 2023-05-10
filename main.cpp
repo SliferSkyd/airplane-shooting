@@ -1,5 +1,6 @@
 #include "ButtonObject.h"
 #include "Level.h"
+#include "LastLevel.h"
 
 using namespace std;
 
@@ -51,7 +52,7 @@ int runIntroScreen() {
     }
 }
 
-int runScreenVictory() {
+int runScreenVictory(int score) {
     const int WIDTH_OFF = 271;
     const int HEIGHT_OFF = 50;
     const int WIDTH_ON = 353;
@@ -67,6 +68,20 @@ int runScreenVictory() {
     target *aim = new target();
     aim->loadImage("data/image/target.png");
     SDL_Event e;
+
+    textObject *scoreText = new textObject();
+    scoreText->loadFont("data/font/ComicShark.ttf", 50);
+    scoreText->setText(("Your score: " + to_string(score)).c_str());
+    scoreText->setColor(textObject::BLUE);
+    int opacity = 0;
+    int deltaOpacity = 2;
+    auto renderTextScore = [&]() {
+        opacity += deltaOpacity;
+        if (opacity >= 256) opacity = 255, deltaOpacity *= -1;
+        else if (opacity < 0) opacity = 0, deltaOpacity *= -1;
+        scoreText->show(335, 325, opacity);
+    };
+
     while (1) {
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) exit(1);
@@ -80,13 +95,12 @@ int runScreenVictory() {
         
         clearScreen();
         applyBackground(background);
-        
+        renderTextScore();
         replay->show();
         aim->show();
         show();
     }
 }
-
 
 int runScreenDefeat() {
     const int WIDTH_OFF = 271;
@@ -127,6 +141,7 @@ int runScreenDefeat() {
 int main(int argc, char ** argv) {
     srand(time(NULL));
     initSDL();
+    static bool safeMode = 0;
     while (1) {
         playSound(8, -1);
         int option = runIntroScreen();
@@ -135,6 +150,7 @@ int main(int argc, char ** argv) {
         if (option == 1) {
             int score = 0;
             int noob = 0;
+            
             for (int i = 0; i < s.size(); ++i) {
                 level currentLevel;
                 currentLevel.init(score, i + 1, s[i].first, s[i].second, 300, 250);
@@ -143,10 +159,15 @@ int main(int argc, char ** argv) {
                     break;             
                 } 
             }
+            if (!noob) {
+                lastLevel currentLevel;
+                currentLevel.init(score, 300, 1000);
+                if (!currentLevel.run(score)) noob = 1;
+            }
             if (noob) {
                 if (runScreenDefeat()) continue;
             } else {
-                if (runScreenVictory()) continue;
+                if (runScreenVictory(score)) continue;
             }
             break;
         } 

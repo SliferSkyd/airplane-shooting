@@ -14,6 +14,7 @@ void textObject::setColor(const int& type) {
     else if (type == GREEN) color = {0, 255, 255};
     else if (type == WHITE) color = {255, 255, 255};
     else if (type == BLUE) color = {0, 0, 255};
+    else if (type == BROWN) color = {92, 38, 3};
 }
 
 void textObject::loadFont(const std::string& path, const int& size) {

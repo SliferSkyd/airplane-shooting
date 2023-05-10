@@ -27,12 +27,18 @@ public:
     void setWon() {
         won = true;
     }
+    int shooted();
+    void regen();
+    int getHeartPoint() {
+        return heartPoint;
+    }
 private:    
     std::vector<bulletObject*> bulletList;
     std::chrono::system_clock::time_point lastBullet, lastShield; 
     baseObject *shield = new baseObject();
     bool hasShield = false;
     bool won = false;
+    int heartPoint = 5;
 };
 
 #endif

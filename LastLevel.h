@@ -1,8 +1,8 @@
-#ifndef LEVEL__H
-#define LEVEL__H
+#ifndef LASTLEVEL__H
+#define LASTLEVEL__H
 
 #include "MainObject.h"
-#include "ThreatObject.h"
+#include "BossObject.h"
 #include "ExplosionObject.h"
 #include "HPObject.h"
 #include "BonusObject.h"
@@ -10,25 +10,27 @@
 #include "target.h"
 
 using namespace std;
-class level {
+
+class lastLevel {
     mainObject *plane = new mainObject();
-    std::vector<threatObject*> enemies;
+    bossObject *boss = new bossObject();
     target *aim = new target();
     explosionObject *exp = new explosionObject();
     SDL_Texture *background;
-    heartPointObject *heartPoint = new heartPointObject();
+    heartPointObject *heartPointMain = new heartPointObject();
+    heartPointObject *heartPointBoss = new heartPointObject();
     bonusObject *heart = new bonusObject();
     bonusObject *shield = new bonusObject();
     textObject *scoreText = new textObject();
 
-    int bkg, score, idLevel;
+    int score;
 public:
-    void init(int lastScore, int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat);
+    void init(int lastScore, int speedMain, int speedBoss);
     void gameOver();
     int run(int &curScore);
     void startGame();
     void endGame();
-    const int MAX_LEN = 4643;
+    const int MAX_LEN = 1778;
 };
 
 #endif

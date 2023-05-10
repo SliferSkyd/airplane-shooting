@@ -51,7 +51,7 @@ SDL_Texture* loadTexture(const std::string& path) {
     SDL_Texture* newTexture = NULL;
     
     if (loadedSurface == NULL) logSDLError(std::cout, "Unable To Load Image!", true);
-    Uint32 colorKey = SDL_MapRGB(loadedSurface->format, 0, 255, 255);
+    Uint32 colorKey = SDL_MapRGB(loadedSurface->format, 167, 175, 180);
     SDL_SetColorKey(loadedSurface, SDL_TRUE, colorKey);
     newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
     

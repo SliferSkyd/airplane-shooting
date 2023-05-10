@@ -75,7 +75,8 @@ void mainObject::loadShieldImage(const std::string& path) {
 }
 
 void mainObject::showShield() {
-    if (!hasShield) return;
+    static bool safeMode;
+    if (!hasShield && !safeMode) return;
     int x = rect.x + rect.w / 2 - shield->getRect().w / 2;
     int y = rect.y + rect.h / 2 - shield->getRect().h / 2;
     shield->setRect(x, y);
@@ -91,4 +92,15 @@ void mainObject::showShield() {
 void mainObject::activeShield() {
     hasShield = true;
     lastShield = std::chrono::system_clock::now();
+}
+
+int mainObject::shooted() {
+    --heartPoint;
+    cout << heartPoint << '\n';
+    return (heartPoint <= 0);
+}
+
+void mainObject::regen() {
+    ++heartPoint;
+    if (heartPoint > 5) heartPoint = 5;
 }

@@ -1,28 +1,17 @@
-#ifndef HP_OBJECT__H
-#define HP_OBJECT__H
+#ifndef HEARTPOINT_OBJECT__H
+#define HEARTPOINT_OBJECT__H
 
 #include "BaseObject.h"
 
 using namespace std;
-class hpObject: public baseObject {
+class heartPointObject: public baseObject {
 public:
-    hpObject();
-    ~hpObject();
-    void loadImage(const std::string& path0, const std::string& path1);
-    void show();
-    int getHP() const {
-        return HP;
-    }
-    void addHP() {
-        if (HP == 5) return;
-        ++HP;
-    }
-    void subHP() {
-        --HP;
-    }
+    heartPointObject();
+    ~heartPointObject();
+    void loadImage(int numLives, int x, int y, const std::string& path0, const std::string& path1);
+    void show(int remainingLives);
 private:
     std::vector<baseObject*> hearts[2];
-    int HP;
 };
 
 #endif

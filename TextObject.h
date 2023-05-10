@@ -7,7 +7,7 @@ using namespace std;
 class textObject: public baseObject {
 public:
     enum textColor {
-        BLACK = 0, RED = 1, BLUE = 2, GREEN = 3, WHITE = 4
+        BLACK = 0, RED = 1, BLUE = 2, GREEN = 3, WHITE = 4, BROWN = 5
     };
     textObject();
     ~textObject();

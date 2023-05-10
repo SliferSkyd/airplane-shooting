@@ -21,7 +21,6 @@ using namespace std;
 
 const int SCREEN_WIDTH = 1000;
 const int SCREEN_HEIGHT = 500;
-const int MAX_LEN = 4643;
 const string WINDOW_TITLE = "Airplane Shooting";
 const double PI = acos(-1);
 

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class threatObject: public baseObject {
+class threatObject: virtual public baseObject {
 public:
     threatObject();
     ~threatObject();
@@ -27,7 +27,7 @@ public:
         this->hasRadar = hasRadar;
     }
     void scan(int x, int y);
-private: 
+protected: 
     std::vector<bulletObject*> bulletList;
     std::chrono::system_clock::time_point lastBullet; 
     double duration;

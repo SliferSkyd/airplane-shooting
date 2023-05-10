@@ -5,7 +5,7 @@
 
 using namespace std;
 
-class explosionObject: public baseObject {
+class explosionObject: virtual public baseObject {
 public:
     explosionObject();
     ~explosionObject();
@@ -17,10 +17,15 @@ public:
         return clip[i];
     }
     void show();
-    void burn(baseObject* object);
-private:
+    void burn(baseObject* object, int numDup);
+    void setNumFrames(const int& numFrames) {
+        this->numFrames = numFrames;
+        clip.resize(numFrames);
+    }
+protected:
+    int numFrames;
     int frame;
-    SDL_Rect clip[4];
+    std::vector<SDL_Rect> clip;
 };
 
 #endif
