@@ -27,12 +27,13 @@ const double PI = acos(-1);
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
 static std::vector<Mix_Chunk*> sound;
-static std::vector<std::string> pathSound = {"laser", "sphere", "explosion", "bomb", "victory", "defeat", "pop", "theme", "menu", "siuu", "success", "death", "ready"};
+static std::vector<std::string> pathSound = {"laser", "sphere", "explosion", "bomb", "victory", "defeat", "pop", "theme", "intro", "siuu", "success", "mainDeath", "ready", "bossHurt", "lastTheme", "bossDeath"};
 
 enum soundEffect {
     laser = 0, sphere = 1, explosion = 2, bomb = 3, victory = 4, 
-    defeat = 5, pop = 6, theme = 7, menu = 8, siuu = 9, 
-    success = 10, death = 11, ready = 12
+    defeat = 5, pop = 6, theme = 7, intro = 8, siuu = 9, 
+    success = 10, mainDeath = 11, ready = 12, bossHurt = 13, lastTheme = 14,
+    bossDeath = 15, bossRoar = 16
 };
 
 void logSDLError(std::ostream& os, const std::string &msg, bool fatal = false);

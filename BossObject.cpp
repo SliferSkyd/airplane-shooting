@@ -34,7 +34,7 @@ void bossObject::transit() {
     if (elapsed_seconds.count() < durationBurn) return;
     lastTransition = curTime;
     ++frame; if (frame >= clip.size()) frame = 0;
-    if (frame == 17) initBullet();
+    if (frame == 20) initBullet();
 }
 
 int bossObject::shooted() {

@@ -80,8 +80,7 @@ void level::endGame() {
     }
 }
 
-int level::run(int& newScore) {
-    static bool safeMode;
+int level::run(int& newScore, int& safeMode) {
     auto explode = [&](baseObject* object, int numDup) {
         const int numFrames = 8;
         exp->setNumFrames(numFrames);
@@ -102,7 +101,9 @@ int level::run(int& newScore) {
         std::chrono::system_clock::time_point entryTime = std::chrono::system_clock::now();
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) exit(1);
-            if (e.type == SDL_SCANCODE_S) safeMode ^= 1;
+            if (e.type == SDL_KEYDOWN) {
+                if (e.key.keysym.sym == SDLK_SPACE) safeMode ^= 1;
+            }
             plane->handleInputAction(e);
             aim->handleInputAction(e);
         }
@@ -110,6 +111,7 @@ int level::run(int& newScore) {
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
         heartPoint->show(plane->getHeartPoint());
         plane->handleMove(elapsedTime);
+        plane->setSafeMode(safeMode);
         plane->showShield();
         plane->show();
         plane->makeBullet(elapsedTime);
@@ -159,11 +161,14 @@ int level::run(int& newScore) {
             if (checkCollision(enemy->getRect(), plane->getRect())) {
                 playSound(bomb);
                 explode(plane, 1);
-                enemy->reborn();
-                if (!plane->checkShield() && plane->shooted()) {
+                if (bkg < MAX_LEN - SCREEN_WIDTH) {
+                    enemy->reborn();
+                    enemy->loadImage(("data/image/enemy" + to_string(Rand(0, numEnemies - 1)) + ".png").c_str());
+                } else enemies.erase(enemies.begin() + i);
+                if (!plane->checkSafeMode() && !plane->checkShield() && plane->shooted()) {
                     newScore = score;
                     haltSound(theme);
-                    playSound(death);
+                    playSound(mainDeath);
                     endGame();
                     return 0; // lost
                 } else ++score;
@@ -175,10 +180,10 @@ int level::run(int& newScore) {
                     playSound(bomb);
                     explode(plane, 1);
                     bulletList.erase(bulletList.begin() + j);
-                    if (!plane->checkShield() && plane->shooted()) {
+                    if (!plane->checkSafeMode() && !plane->checkShield() && plane->shooted()) {
                         newScore = score;
                         haltSound(theme);
-                        playSound(death);
+                        playSound(mainDeath);
                         endGame();
                         return 0; // lost
                     }

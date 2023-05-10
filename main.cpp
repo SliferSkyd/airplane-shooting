@@ -141,20 +141,19 @@ int runScreenDefeat() {
 int main(int argc, char ** argv) {
     srand(time(NULL));
     initSDL();
-    static bool safeMode = 0;
+    int safeMode = 0;
     while (1) {
-        playSound(8, -1);
+        playSound(intro, -1);
         int option = runIntroScreen();
         std::vector<std::pair<int, int>> s = {{1, 1}, {2, 1}, {3, 1}};
-        haltSound(8);
+        haltSound(intro);
         if (option == 1) {
             int score = 0;
             int noob = 0;
-            
             for (int i = 0; i < s.size(); ++i) {
                 level currentLevel;
                 currentLevel.init(score, i + 1, s[i].first, s[i].second, 300, 250);
-                if (!currentLevel.run(score)) {
+                if (!currentLevel.run(score, safeMode)) {
                     noob = 1;
                     break;             
                 } 
@@ -162,7 +161,7 @@ int main(int argc, char ** argv) {
             if (!noob) {
                 lastLevel currentLevel;
                 currentLevel.init(score, 300, 1000);
-                if (!currentLevel.run(score)) noob = 1;
+                if (!currentLevel.run(score, safeMode)) noob = 1;
             }
             if (noob) {
                 if (runScreenDefeat()) continue;

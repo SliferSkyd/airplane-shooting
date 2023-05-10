@@ -24,6 +24,9 @@ public:
     bool checkShield() {
         return hasShield;
     }
+    int checkSafeMode() {
+        return safeMode;
+    }
     void setWon() {
         won = true;
     }
@@ -32,12 +35,16 @@ public:
     int getHeartPoint() {
         return heartPoint;
     }
+    void setSafeMode(const int& safeMode) {
+        this->safeMode = safeMode;
+    }
 private:    
     std::vector<bulletObject*> bulletList;
     std::chrono::system_clock::time_point lastBullet, lastShield; 
     baseObject *shield = new baseObject();
     bool hasShield = false;
     bool won = false;
+    int safeMode = 0;
     int heartPoint = 5;
 };
 

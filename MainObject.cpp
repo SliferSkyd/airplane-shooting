@@ -75,7 +75,6 @@ void mainObject::loadShieldImage(const std::string& path) {
 }
 
 void mainObject::showShield() {
-    static bool safeMode;
     if (!hasShield && !safeMode) return;
     int x = rect.x + rect.w / 2 - shield->getRect().w / 2;
     int y = rect.y + rect.h / 2 - shield->getRect().h / 2;
@@ -96,7 +95,6 @@ void mainObject::activeShield() {
 
 int mainObject::shooted() {
     --heartPoint;
-    cout << heartPoint << '\n';
     return (heartPoint <= 0);
 }
 

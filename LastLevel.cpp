@@ -4,7 +4,7 @@ void lastLevel::init(int lastScore, int speedMain, int speedBoss) {
     score = lastScore;
 
     heartPointMain->loadImage(5, 40, 10, "data/image/HP0.png", "data/image/HP1.png");
-    heartPointBoss->loadImage(10, 870, 10, "data/image/boss_HP0.png", "data/image/boss_HP1.png");
+    heartPointBoss->loadImage(10, 750, 10, "data/image/boss_HP0.png", "data/image/boss_HP1.png");
     background = loadTexture("data/image/lastbg.png");
    
     plane->loadImage("data/image/plane.png");
@@ -15,7 +15,7 @@ void lastLevel::init(int lastScore, int speedMain, int speedBoss) {
     boss->setNumFrames(32); 
     boss->loadImage("data/image/boss.png");
     boss->setClip();
-    boss->setRect(SCREEN_WIDTH - boss->getRect().w / 32 - 50, Rand(10, SCREEN_HEIGHT - boss->getRect().h - 10));
+    boss->setRect(SCREEN_WIDTH - boss->getRect().w / 32 - 50, Rand(10, SCREEN_HEIGHT - boss->getRect().h - 100));
     boss->setSpeed(speedBoss);
     
     aim->loadImage("data/image/target.png");  
@@ -56,7 +56,7 @@ void lastLevel::startGame() {
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
         scoreText->show(800, 10);
-        levelText->show(180, 200, 255 - i);
+        levelText->show(50, 200, 255 - i);
         show();
     }
 }
@@ -75,9 +75,7 @@ void lastLevel::endGame() {
     }
 }
 
-int lastLevel::run(int& newScore) {
-    static bool safeMode;
-    cout << safeMode << '\n';
+int lastLevel::run(int &newScore, int &safeMode) {
     auto explode = [&](baseObject* object, int numDup) {
         const int numFrames = 8;
         exp->setNumFrames(numFrames);
@@ -89,7 +87,7 @@ int lastLevel::run(int& newScore) {
             show();         
         }
     };
-    playSound(theme, -1);
+    playSound(lastTheme, -1);
     SDL_Event e;
     double elapsedTime = 0;
     startGame();
@@ -97,7 +95,9 @@ int lastLevel::run(int& newScore) {
         std::chrono::system_clock::time_point entryTime = std::chrono::system_clock::now();
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) exit(1);
-            if (e.type == SDL_SCANCODE_S) safeMode ^= 1;
+            if (e.type == SDL_KEYDOWN) {
+                if (e.key.keysym.sym == SDLK_SPACE) safeMode ^= 1;
+            }
             plane->handleInputAction(e);
             aim->handleInputAction(e);
         }
@@ -106,6 +106,7 @@ int lastLevel::run(int& newScore) {
         heartPointMain->show(plane->getHeartPoint());
         heartPointBoss->show(boss->getHeartPoint());
         plane->handleMove(elapsedTime);
+        plane->setSafeMode(safeMode);
         plane->showShield();
         plane->show();
         plane->makeBullet(elapsedTime);
@@ -138,14 +139,17 @@ int lastLevel::run(int& newScore) {
         for (int j = 0; j < bulletList.size(); ++j) {
             bulletObject* bullet = bulletList.at(j);
             if (checkCollision(bullet->getRect(), boss->getRect())) {
-                playSound(explosion);
+                playSound(bossHurt);
                 explode(boss, 32);
                 if (boss->shooted()) {
-                    haltSound(theme);
+                    playSound(bossDeath);
+                    haltSound(lastTheme);
                     playSound(siuu);
                     endGame();
+                    newScore = score;
                     return 1;
                 }
+                ++score;
                 bulletList.erase(bulletList.begin() + j);
                 destroyed = true;
                 break;
@@ -160,10 +164,11 @@ int lastLevel::run(int& newScore) {
             if (checkCollision(bullet->getRect(), plane->getRect())) {
                 playSound(bomb);
                 explode(plane, 1);
-                if (!plane->checkShield() && plane->shooted()) {
-                    haltSound(theme);
-                    playSound(death);
+                if (!plane->checkSafeMode() && !plane->checkShield() && plane->shooted()) {
+                    haltSound(lastTheme);
+                    playSound(mainDeath);
                     endGame();
+                    newScore = score;
                     return 0;
                 }
                 bulletList.erase(bulletList.begin() + j);

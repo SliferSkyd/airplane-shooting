@@ -27,7 +27,7 @@ class lastLevel {
 public:
     void init(int lastScore, int speedMain, int speedBoss);
     void gameOver();
-    int run(int &curScore);
+    int run(int &newScore, int &safeMode);
     void startGame();
     void endGame();
     const int MAX_LEN = 1778;
