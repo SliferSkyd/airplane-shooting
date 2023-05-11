@@ -81,16 +81,16 @@ void level::endGame() {
 }
 
 int level::run(int& newScore, int& safeMode) {
+    std::vector<explosionObject*> explosions;
     auto explode = [&](baseObject* object, int numDup) {
+        explosionObject* exp = new explosionObject(); 
         const int numFrames = 8;
         exp->setNumFrames(numFrames);
         exp->loadImage(("data/image/exp" + to_string(Rand(0, 2)) + ".png").c_str());
         exp->setClip();
-        for (int i = 0; i < numFrames; ++i) {
-            exp->setFrame(i);
-            exp->burn(object, numDup);  
-            show();         
-        }
+        exp->burn(object, numDup);
+        exp->setFrame(0);
+        explosions.push_back(exp);
     };
 
     playSound(theme, -1);
@@ -103,6 +103,7 @@ int level::run(int& newScore, int& safeMode) {
             if (e.type == SDL_QUIT) exit(1);
             if (e.type == SDL_KEYDOWN) {
                 if (e.key.keysym.sym == SDLK_SPACE) safeMode ^= 1;
+                if (e.key.keysym.sym == SDLK_BACKSPACE) goto label;
             }
             plane->handleInputAction(e);
             aim->handleInputAction(e);
@@ -192,6 +193,14 @@ int level::run(int& newScore, int& safeMode) {
             enemy->setBulletList(bulletList);
             enemies[i] = enemy;
         }
+        for (int i = 0; i < explosions.size(); ++i) {
+            explosionObject* exp = explosions.at(i);
+            if (exp->completed()) explosions.erase(explosions.begin() + i);
+            else {
+                exp->show();
+                exp->nextFrame();
+            }
+        }
         show();
         if (bkg < MAX_LEN - SCREEN_WIDTH) ++bkg;
         if (enemies.empty()) plane->setWon();
@@ -200,6 +209,7 @@ int level::run(int& newScore, int& safeMode) {
         elapsedTime = (exitTime - entryTime).count() / 1e9;
         // cout << elapsedTime << '\n';
     }
+    label:;
     haltSound(theme);
     playSound(siuu);
     newScore = score;

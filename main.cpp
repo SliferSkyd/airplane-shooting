@@ -33,7 +33,9 @@ int runIntroScreen() {
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) exit(1);
             if (start->isClicked(e)) return 1;
-            if (help->isClicked(e)) return 0;
+            if (help->isClicked(e)) {
+                system("start https://github.com/SliferSkyd/airplane-shooting.git");
+            }
             if (quit->isClicked(e)) exit(1);
             aim->handleInputAction(e);
         }
@@ -53,17 +55,18 @@ int runIntroScreen() {
 }
 
 int runScreenVictory(int score) {
-    const int WIDTH_OFF = 271;
-    const int HEIGHT_OFF = 50;
-    const int WIDTH_ON = 353;
-    const int HEIGHT_ON = 65;
-
     playSound(victory, -1);
     SDL_Texture *background = loadTexture("data/image/victory.png");
+
     buttonObject *replay = new buttonObject();
     replay->loadImage("data/image/replay_victory.png");
     replay->setPosition(800, 450);
-    replay->setSize(WIDTH_OFF, HEIGHT_OFF, WIDTH_ON, HEIGHT_ON);
+    replay->setSize(replay->getRect().w, replay->getRect().h, replay->getRect().w * 1.2, replay->getRect().h * 1.2);
+
+    buttonObject *info = new buttonObject();  
+    info->loadImage("data/image/info_victory.png");
+    info->setPosition(100, 450);
+    info->setSize(info->getRect().w, info->getRect().h, info->getRect().w * 1.2, info->getRect().h * 1.2);
 
     target *aim = new target();
     aim->loadImage("data/image/target.png");
@@ -89,35 +92,54 @@ int runScreenVictory(int score) {
                 haltSound(victory);
                 return 1;
             }
+            if (info->isClicked(e)) {
+                system("start https://www.facebook.com/huy.hoang.5904");
+            }
             aim->handleInputAction(e);
         }
         replay->handleMove(aim->getRect());
-        
+        info->handleMove(aim->getRect());
         clearScreen();
         applyBackground(background);
         renderTextScore();
         replay->show();
+        info->show();
         aim->show();
         show();
     }
 }
 
-int runScreenDefeat() {
-    const int WIDTH_OFF = 271;
-    const int HEIGHT_OFF = 50;
-    const int WIDTH_ON = 353;
-    const int HEIGHT_ON = 65;
-
+int runScreenDefeat(int score) {
     playSound(defeat, -1);
     SDL_Texture *background = loadTexture("data/image/defeat.png");
+
     buttonObject *replay = new buttonObject();
     replay->loadImage("data/image/replay_defeat.png");
     replay->setPosition(800, 450);
-    replay->setSize(WIDTH_OFF, HEIGHT_OFF, WIDTH_ON, HEIGHT_ON);
+    replay->setSize(replay->getRect().w, replay->getRect().h, replay->getRect().w * 1.2, replay->getRect().h * 1.2);
+
+    buttonObject *info = new buttonObject();  
+    info->loadImage("data/image/info_defeat.png");
+    info->setPosition(100, 450);
+    info->setSize(info->getRect().w, info->getRect().h, info->getRect().w * 1.2, info->getRect().h * 1.2);
 
     target *aim = new target();
     aim->loadImage("data/image/target.png");
     SDL_Event e;
+
+    textObject *scoreText = new textObject();
+    scoreText->loadFont("data/font/ComicShark.ttf", 50);
+    scoreText->setText(("Your score: " + to_string(score)).c_str());
+    scoreText->setColor(textObject::BLUE);
+    int opacity = 0;
+    int deltaOpacity = 2;
+    auto renderTextScore = [&]() {
+        opacity += deltaOpacity;
+        if (opacity >= 256) opacity = 255, deltaOpacity *= -1;
+        else if (opacity < 0) opacity = 0, deltaOpacity *= -1;
+        scoreText->show(335, 325, opacity);
+    };
+
     while (1) {
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) exit(1);
@@ -125,14 +147,18 @@ int runScreenDefeat() {
                 haltSound(defeat);
                 return 1;
             }
+            if (info->isClicked(e)) {
+                system("start https://www.facebook.com/huy.hoang.5904");
+            }
             aim->handleInputAction(e);
         }
         replay->handleMove(aim->getRect());
-        
+        info->handleMove(aim->getRect());
         clearScreen();
         applyBackground(background);
-        
+        renderTextScore();
         replay->show();
+        info->show();
         aim->show();
         show();
     }
@@ -164,7 +190,7 @@ int main(int argc, char ** argv) {
                 if (!currentLevel.run(score, safeMode)) noob = 1;
             }
             if (noob) {
-                if (runScreenDefeat()) continue;
+                if (runScreenDefeat(score)) continue;
             } else {
                 if (runScreenVictory(score)) continue;
             }

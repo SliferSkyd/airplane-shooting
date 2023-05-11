@@ -17,6 +17,7 @@ void lastLevel::init(int lastScore, int speedMain, int speedBoss) {
     boss->setClip();
     boss->setRect(SCREEN_WIDTH - boss->getRect().w / 32 - 50, Rand(10, SCREEN_HEIGHT - boss->getRect().h - 100));
     boss->setSpeed(speedBoss);
+    boss->setHasRadar(true);
     
     aim->loadImage("data/image/target.png");  
 
@@ -76,16 +77,16 @@ void lastLevel::endGame() {
 }
 
 int lastLevel::run(int &newScore, int &safeMode) {
+    std::vector<explosionObject*> explosions;
     auto explode = [&](baseObject* object, int numDup) {
+        explosionObject* exp = new explosionObject(); 
         const int numFrames = 8;
         exp->setNumFrames(numFrames);
         exp->loadImage(("data/image/exp" + to_string(Rand(0, 2)) + ".png").c_str());
         exp->setClip();
-        for (int i = 0; i < numFrames; ++i) {
-            exp->setFrame(i);
-            exp->burn(object, numDup);  
-            show();         
-        }
+        exp->burn(object, numDup);
+        exp->setFrame(0);
+        explosions.push_back(exp);
     };
     playSound(lastTheme, -1);
     SDL_Event e;
@@ -175,6 +176,14 @@ int lastLevel::run(int &newScore, int &safeMode) {
             }
         }
         boss->setBulletList(bulletList);
+        for (int i = 0; i < explosions.size(); ++i) {
+            explosionObject* exp = explosions.at(i);
+            if (exp->completed()) explosions.erase(explosions.begin() + i);
+            else {
+                exp->show();
+                exp->nextFrame();
+            }
+        }
         show();
         std::chrono::system_clock::time_point exitTime = std::chrono::system_clock::now();
         elapsedTime = (exitTime - entryTime).count() / 1e9;

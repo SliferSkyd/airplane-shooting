@@ -17,14 +17,19 @@ public:
         return clip[i];
     }
     void show();
+    void nextFrame() {
+        ++frame;
+    }
+    int completed() {
+        return (frame >= numFrames);
+    }
     void burn(baseObject* object, int numDup);
     void setNumFrames(const int& numFrames) {
         this->numFrames = numFrames;
         clip.resize(numFrames);
     }
 protected:
-    int numFrames;
-    int frame;
+    int numFrames, frame = 0;
     std::vector<SDL_Rect> clip;
 };
 

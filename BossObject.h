@@ -20,10 +20,9 @@ public:
         return heartPoint;
     }
 private:
-    const double durationBurn = 0.0625;
+    const double durationBurn = 0.03125;
     const double durationRegen = 7;
     std::chrono::system_clock::time_point lastTransition, lastRegen;
-    const int hasRadar = 1;
     int heartPoint = 10;
 };
 
