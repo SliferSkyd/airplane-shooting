@@ -7,13 +7,11 @@ using namespace std;
 class bulletObject: public baseObject {
 public:
     enum type {
-        NONE = 0, LASER = 1, SPHERE = 2
+        NONE = 0, LASER = 1, SPHERE = 2, ROCKET = 3, FIRE = 4
     };
     bulletObject();
     ~bulletObject();
     void handleMove(const double& elapsedTime);
-    void handleInputAction(SDL_Event events);
-
     int getType() const {
         return type;
     }

@@ -11,21 +11,21 @@
 
 using namespace std;
 class level {
-    mainObject *plane = new mainObject();
+    mainObject *plane;
     std::vector<threatObject*> enemies;
-    target *aim = new target();
-    explosionObject *exp = new explosionObject();
+    target *aim;
     SDL_Texture *background;
-    heartPointObject *heartPoint = new heartPointObject();
-    bonusObject *heart = new bonusObject();
-    bonusObject *shield = new bonusObject();
-    textObject *scoreText = new textObject();
-
-    int bkg, score, idLevel;
+    heartPointObject *heartPoint;
+    bonusObject *heart;
+    bonusObject *shield;
+     textObject *scoreText;
+    int bkg, idLevel;
 public:
-    void init(int lastScore, int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat);
+    level();
+    ~level();
+    void init(int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat);
     void gameOver();
-    int run(int &curScore, int &safeMode);
+    int run();
     void startGame();
     void endGame();
     const int MAX_LEN = 4643;

@@ -12,22 +12,21 @@
 using namespace std;
 
 class lastLevel {
-    mainObject *plane = new mainObject();
-    bossObject *boss = new bossObject();
-    target *aim = new target();
-    explosionObject *exp = new explosionObject();
+    mainObject *plane;
+    bossObject *boss;
+    target *aim;
     SDL_Texture *background;
-    heartPointObject *heartPointMain = new heartPointObject();
-    heartPointObject *heartPointBoss = new heartPointObject();
-    bonusObject *heart = new bonusObject();
-    bonusObject *shield = new bonusObject();
-    textObject *scoreText = new textObject();
-
-    int score;
+    heartPointObject *heartPointMain;
+    heartPointObject *heartPointBoss;
+    bonusObject *heart;
+    bonusObject *shield;
+    textObject *scoreText;
 public:
-    void init(int lastScore, int speedMain, int speedBoss);
+    lastLevel();
+    ~lastLevel();
+    void init(int speedMain, int speedBoss);
     void gameOver();
-    int run(int &newScore, int &safeMode);
+    int run();
     void startGame();
     void endGame();
     const int MAX_LEN = 1778;

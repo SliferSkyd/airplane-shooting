@@ -5,7 +5,11 @@ threatObject::threatObject() {
 }
 
 threatObject::~threatObject() {
-
+    while (bulletList.size()) {
+        bulletObject* bullet = bulletList.at(0);
+        delete bullet; bullet = nullptr;
+        bulletList.erase(bulletList.begin());
+    }
 }
 
 void threatObject::handleMove(const double& elapsedTime) {

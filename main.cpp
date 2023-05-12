@@ -54,7 +54,7 @@ int runIntroScreen() {
     }
 }
 
-int runScreenVictory(int score) {
+int runScreenVictory() {
     playSound(victory, -1);
     SDL_Texture *background = loadTexture("data/image/victory.png");
 
@@ -74,7 +74,7 @@ int runScreenVictory(int score) {
 
     textObject *scoreText = new textObject();
     scoreText->loadFont("data/font/ComicShark.ttf", 50);
-    scoreText->setText(("Your score: " + to_string(score)).c_str());
+    scoreText->setText(("Your score: " + to_string(getScore())).c_str());
     scoreText->setColor(textObject::BLUE);
     int opacity = 0;
     int deltaOpacity = 2;
@@ -109,7 +109,7 @@ int runScreenVictory(int score) {
     }
 }
 
-int runScreenDefeat(int score) {
+int runScreenDefeat() {
     playSound(defeat, -1);
     SDL_Texture *background = loadTexture("data/image/defeat.png");
 
@@ -129,7 +129,7 @@ int runScreenDefeat(int score) {
 
     textObject *scoreText = new textObject();
     scoreText->loadFont("data/font/ComicShark.ttf", 50);
-    scoreText->setText(("Your score: " + to_string(score)).c_str());
+    scoreText->setText(("Your score: " + to_string(getScore())).c_str());
     scoreText->setColor(textObject::BLUE);
     int opacity = 0;
     int deltaOpacity = 2;
@@ -167,32 +167,31 @@ int runScreenDefeat(int score) {
 int main(int argc, char ** argv) {
     srand(time(NULL));
     initSDL();
-    int safeMode = 0;
     while (1) {
+        resetScore();
         playSound(intro, -1);
         int option = runIntroScreen();
         std::vector<std::pair<int, int>> s = {{1, 1}, {2, 1}, {3, 1}};
         haltSound(intro);
         if (option == 1) {
-            int score = 0;
             int noob = 0;
             for (int i = 0; i < s.size(); ++i) {
                 level currentLevel;
-                currentLevel.init(score, i + 1, s[i].first, s[i].second, 300, 250);
-                if (!currentLevel.run(score, safeMode)) {
+                currentLevel.init(i + 1, s[i].first, s[i].second, 300, 250);
+                if (!currentLevel.run()) {
                     noob = 1;
                     break;             
                 } 
             }
             if (!noob) {
                 lastLevel currentLevel;
-                currentLevel.init(score, 300, 1000);
-                if (!currentLevel.run(score, safeMode)) noob = 1;
+                currentLevel.init(300, 1000);
+                if (!currentLevel.run()) noob = 1;
             }
             if (noob) {
-                if (runScreenDefeat(score)) continue;
+                if (runScreenDefeat()) continue;
             } else {
-                if (runScreenVictory(score)) continue;
+                if (runScreenVictory()) continue;
             }
             break;
         } 

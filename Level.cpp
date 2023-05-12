@@ -2,9 +2,27 @@
 
 const int numEnemies = 9;
 
-void level::init(int lastScore, int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat) {
-    this->idLevel = idLevel;
-    score = lastScore, bkg = 0;
+level::level() {
+    plane = new mainObject();
+    aim = new target();
+    heartPoint = new heartPointObject();
+    heart = new bonusObject();
+    shield = new bonusObject();
+    scoreText = new textObject();
+}
+
+level::~level() {
+    delete plane; delete aim; delete heartPoint; 
+    delete heart; delete shield; delete scoreText;
+    for (int i = 0; i < enemies.size(); ++i) {
+        threatObject* enemy = enemies.at(i);
+        enemies.erase(enemies.begin() + i);
+        delete enemy; enemy = nullptr;
+    }
+}
+
+void level::init(int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat) {
+    this->idLevel = idLevel, bkg = 0;
 
     heartPoint->loadImage(5, 40, 10, "data/image/HP0.png", "data/image/HP1.png");
     vector<bool> hasRadar = randomTrueFalse(numHasRadar, numThreat - numHasRadar);
@@ -42,7 +60,7 @@ void level::gameOver() {
     clearScreen();
     applyTexture(background, bkg, 0, SCREEN_WIDTH);
     heartPoint->show(plane->getHeartPoint());
-    scoreText->setText(("Score: " + to_string(score)).c_str());
+    scoreText->setText(("Score: " + to_string(getScore())).c_str());
     scoreText->show(800, 10);
     show();
     playSound(5);
@@ -60,7 +78,7 @@ void level::startGame() {
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
         heartPoint->show(plane->getHeartPoint());
         aim->show();
-        scoreText->setText(("Score: " + to_string(score)).c_str());
+        scoreText->setText(("Score: " + to_string(getScore())).c_str());
         scoreText->show(800, 10);
         levelText->show(200, 200, 255 - i);
         show();
@@ -74,22 +92,24 @@ void level::endGame() {
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
         heartPoint->show(plane->getHeartPoint());
         aim->show();
-        scoreText->setText(("Score: " + to_string(score)).c_str());
+        scoreText->setText(("Score: " + to_string(getScore())).c_str());
         scoreText->show(800, 10);
         show();
     }
 }
 
-int level::run(int& newScore, int& safeMode) {
+int level::run() {
     std::vector<explosionObject*> explosions;
-    auto explode = [&](baseObject* object, int numDup) {
+    auto explode = [&](baseObject* object, bool nuclear) {
         explosionObject* exp = new explosionObject(); 
-        const int numFrames = 8;
+        const int numFrames = (nuclear ? 12 : 8);
         exp->setNumFrames(numFrames);
-        exp->loadImage(("data/image/exp" + to_string(Rand(0, 2)) + ".png").c_str());
+        if (!nuclear) exp->loadImage(("data/image/exp" + to_string(Rand(0, 2)) + ".png").c_str());
+        else exp->loadImage("data/image/special_exp.png");
         exp->setClip();
-        exp->burn(object, numDup);
+        exp->burn(object, 1);
         exp->setFrame(0);
+        object->setActive(false);
         explosions.push_back(exp);
     };
 
@@ -102,7 +122,7 @@ int level::run(int& newScore, int& safeMode) {
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) exit(1);
             if (e.type == SDL_KEYDOWN) {
-                if (e.key.keysym.sym == SDLK_SPACE) safeMode ^= 1;
+                if (e.key.keysym.sym == SDLK_SPACE) safeMode ^= 1, plane->setSafeMode(safeMode);
                 if (e.key.keysym.sym == SDLK_BACKSPACE) goto label;
             }
             plane->handleInputAction(e);
@@ -112,12 +132,11 @@ int level::run(int& newScore, int& safeMode) {
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
         heartPoint->show(plane->getHeartPoint());
         plane->handleMove(elapsedTime);
-        plane->setSafeMode(safeMode);
         plane->showShield();
         plane->show();
         plane->makeBullet(elapsedTime);
         aim->show();
-        scoreText->setText(("Score: " + to_string(score)).c_str());
+        scoreText->setText(("Score: " + to_string(getScore())).c_str());
         scoreText->show(800, 10);
         if (heart->getIsMove() && checkCollision(heart->getRect(), plane->getRect())) {
             playSound(pop);
@@ -146,13 +165,17 @@ int level::run(int& newScore, int& safeMode) {
                 bulletObject* bullet = bulletList.at(j);
                 if (checkCollision(bullet->getRect(), enemy->getRect())) {
                     playSound(explosion);
-                    explode(enemy, 1);
-                    ++score;
+                    explode(enemy, (bullet->getType() == bulletObject::ROCKET));
+                    gainScore();
                     if (bkg < MAX_LEN - SCREEN_WIDTH) {
                         enemy->reborn();
                         enemy->loadImage(("data/image/enemy" + to_string(Rand(0, numEnemies - 1)) + ".png").c_str());
-                    } else enemies.erase(enemies.begin() + i);
+                    } else {
+                        enemies.erase(enemies.begin() + i);
+                        delete enemy; enemy = nullptr;
+                    }
                     bulletList.erase(bulletList.begin() + j);
+                    delete bullet; bullet = nullptr;
                     destroyed = true;
                     break;
                 }
@@ -161,28 +184,30 @@ int level::run(int& newScore, int& safeMode) {
             if (destroyed) continue;
             if (checkCollision(enemy->getRect(), plane->getRect())) {
                 playSound(bomb);
-                explode(plane, 1);
+                explode(plane, false);
                 if (bkg < MAX_LEN - SCREEN_WIDTH) {
                     enemy->reborn();
                     enemy->loadImage(("data/image/enemy" + to_string(Rand(0, numEnemies - 1)) + ".png").c_str());
-                } else enemies.erase(enemies.begin() + i);
-                if (!plane->checkSafeMode() && !plane->checkShield() && plane->shooted()) {
-                    newScore = score;
+                } else {
+                    enemies.erase(enemies.begin() + i);
+                    delete enemy; enemy = nullptr;
+                }
+                if (!safeMode && !plane->checkShield() && plane->shooted()) {
                     haltSound(theme);
                     playSound(mainDeath);
                     endGame();
                     return 0; // lost
-                } else ++score;
+                } else gainScore();
             }
             bulletList = enemy->getBulletList();
             for (int j = 0; j < bulletList.size(); ++j) {
                 bulletObject* bullet = bulletList.at(j);
                 if (checkCollision(bullet->getRect(), plane->getRect())) {
                     playSound(bomb);
-                    explode(plane, 1);
+                    explode(plane, false);
                     bulletList.erase(bulletList.begin() + j);
-                    if (!plane->checkSafeMode() && !plane->checkShield() && plane->shooted()) {
-                        newScore = score;
+                    delete bullet; bullet = nullptr;
+                    if (!safeMode && !plane->checkShield() && plane->shooted()) {
                         haltSound(theme);
                         playSound(mainDeath);
                         endGame();
@@ -195,8 +220,10 @@ int level::run(int& newScore, int& safeMode) {
         }
         for (int i = 0; i < explosions.size(); ++i) {
             explosionObject* exp = explosions.at(i);
-            if (exp->completed()) explosions.erase(explosions.begin() + i);
-            else {
+            if (exp->completed()) {
+                explosions.erase(explosions.begin() + i);
+                delete exp; exp = nullptr; 
+            } else {
                 exp->show();
                 exp->nextFrame();
             }
@@ -212,7 +239,6 @@ int level::run(int& newScore, int& safeMode) {
     label:;
     haltSound(theme);
     playSound(siuu);
-    newScore = score;
     endGame();
     return 1; // won
 }

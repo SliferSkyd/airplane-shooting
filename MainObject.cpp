@@ -1,11 +1,19 @@
 #include "MainObject.h"
 
 mainObject::mainObject() {
-
+    shield = new baseObject();
+    hasShield = false;
+    won = false;
+    safeMode = 0;
+    heartPoint = 5;
 }
 
 mainObject::~mainObject() {
-
+    while (bulletList.size()) {
+        bulletObject* bullet = bulletList.at(0);
+        delete bullet; bullet = nullptr;
+        bulletList.erase(bulletList.begin());
+    }
 }
 
 void mainObject::handleMove(const double& elapsedTime) {
@@ -33,23 +41,40 @@ void mainObject::handleInputAction(SDL_Event events) {
         std::chrono::system_clock::time_point curTime = std::chrono::system_clock::now();
         std::chrono::duration<double> elapsed_seconds = curTime - lastBullet;
         if (elapsed_seconds.count() < 0.5) return;
-
+        
         lastBullet = curTime; 
         bulletObject* bullet = new bulletObject();
         if (events.button.button == SDL_BUTTON_LEFT) {
             bullet->loadImage("data/image/laser.png");
             bullet->setType(bulletObject::LASER);
-            playSound(0);
-        } else {
+            playSound(laser);
+            bullet->setSpeed(20);
+            bullet->setAngle(angle);
+            bullet->setRect(rect.x + rect.w / 2 + rect.w / 2 * cos(angle), rect.y + rect.h / 2 + rect.w / 2 * sin(angle));
+            bullet->setIsMove(true);
+            bulletList.push_back(bullet);
+        } else if (events.button.button == SDL_BUTTON_RIGHT) {
             bullet->loadImage("data/image/sphere.png");
             bullet->setType(bulletObject::SPHERE);
-            playSound(1);
+            playSound(sphere);
+            bullet->setSpeed(20);
+            bullet->setAngle(angle);
+            bullet->setRect(rect.x + rect.w / 2 + rect.w / 2 * cos(angle), rect.y + rect.h / 2 + rect.w / 2 * sin(angle));
+            bullet->setIsMove(true);
+            bulletList.push_back(bullet);
+        } else {
+            const double GAP = 0.1;
+            for (int i = -2; i <= 2; ++i) {
+                bulletObject* bullet = new bulletObject();
+                bullet->loadImage("data/image/rocket.png");
+                bullet->setType(bulletObject::ROCKET);
+                bullet->setSpeed(20);
+                bullet->setAngle(angle + GAP * i);
+                bullet->setRect(rect.x + rect.w / 2 + rect.w / 2 * cos(angle), rect.y + rect.h / 2 + rect.w / 2 * sin(angle));
+                bullet->setIsMove(true);
+                bulletList.push_back(bullet);
+            }
         }
-        bullet->setSpeed(20);
-        bullet->setAngle(angle);
-        bullet->setRect(rect.x + rect.w / 2 + rect.w / 2 * cos(angle), rect.y + rect.h / 2 + rect.w / 2 * sin(angle));
-        bullet->setIsMove(true);
-        bulletList.push_back(bullet);
     }
 }
 

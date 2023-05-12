@@ -28,9 +28,13 @@ public:
         this->numFrames = numFrames;
         clip.resize(numFrames);
     }
+    baseObject* getObject() {
+        return object;
+    }
 protected:
     int numFrames, frame = 0;
     std::vector<SDL_Rect> clip;
+    baseObject* object;
 };
 
 #endif

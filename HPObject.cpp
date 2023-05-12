@@ -5,7 +5,7 @@ heartPointObject::heartPointObject() {
 }
 
 heartPointObject::~heartPointObject() {
-
+    
 }
 
 void heartPointObject::loadImage(int numLives, int x, int y, const std::string& path0, const std::string& path1) {

@@ -1,8 +1,24 @@
 #include "LastLevel.h"
 
-void lastLevel::init(int lastScore, int speedMain, int speedBoss) {
-    score = lastScore;
+lastLevel::lastLevel() {
+    plane = new mainObject();
+    boss = new bossObject();
+    aim = new target();
+    
+    heartPointMain = new heartPointObject();
+    heartPointBoss = new heartPointObject();
+    heart = new bonusObject();
+    shield = new bonusObject();
+    scoreText = new textObject();
+}
 
+lastLevel::~lastLevel() {
+    delete plane; delete aim; delete heartPointMain;
+    delete heartPointBoss; delete heart; delete shield; 
+    delete scoreText; delete boss;
+}
+
+void lastLevel::init(int speedMain, int speedBoss) {
     heartPointMain->loadImage(5, 40, 10, "data/image/HP0.png", "data/image/HP1.png");
     heartPointBoss->loadImage(10, 750, 10, "data/image/boss_HP0.png", "data/image/boss_HP1.png");
     background = loadTexture("data/image/lastbg.png");
@@ -36,7 +52,7 @@ void lastLevel::gameOver() {
     applyTexture(background, 0, 0, SCREEN_WIDTH);
     heartPointMain->show(plane->getHeartPoint());
     heartPointBoss->show(boss->getHeartPoint());
-    scoreText->setText(("Score: " + to_string(score)).c_str());
+    scoreText->setText(("Score: " + to_string(getScore())).c_str());
     scoreText->show(800, 10);
     show();
     playSound(5);
@@ -55,7 +71,7 @@ void lastLevel::startGame() {
         heartPointMain->show(plane->getHeartPoint());
         heartPointBoss->show(boss->getHeartPoint());
         aim->show();
-        scoreText->setText(("Score: " + to_string(score)).c_str());
+        scoreText->setText(("Score: " + to_string(getScore())).c_str());
         scoreText->show(800, 10);
         levelText->show(50, 200, 255 - i);
         show();
@@ -70,22 +86,25 @@ void lastLevel::endGame() {
         heartPointMain->show(plane->getHeartPoint());
         heartPointBoss->show(boss->getHeartPoint());
         aim->show();
-        scoreText->setText(("Score: " + to_string(score)).c_str());
+        scoreText->setText(("Score: " + to_string(getScore())).c_str());
         scoreText->show(800, 10);
         show();
     }
 }
 
-int lastLevel::run(int &newScore, int &safeMode) {
+int lastLevel::run() {
     std::vector<explosionObject*> explosions;
-    auto explode = [&](baseObject* object, int numDup) {
+    auto explode = [&](baseObject* object, bool isBoss) {
         explosionObject* exp = new explosionObject(); 
-        const int numFrames = 8;
+        const int numFrames = (isBoss ? 12 : 8);
+        const int numDuplicates = (isBoss ? 32 : 1);
         exp->setNumFrames(numFrames);
-        exp->loadImage(("data/image/exp" + to_string(Rand(0, 2)) + ".png").c_str());
+        if (!isBoss) exp->loadImage(("data/image/exp" + to_string(Rand(0, 2)) + ".png").c_str());
+        else exp->loadImage("data/image/special_exp.png");
         exp->setClip();
-        exp->burn(object, numDup);
+        exp->burn(object, numDuplicates);
         exp->setFrame(0);
+        object->setActive(false);
         explosions.push_back(exp);
     };
     playSound(lastTheme, -1);
@@ -97,89 +116,92 @@ int lastLevel::run(int &newScore, int &safeMode) {
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) exit(1);
             if (e.type == SDL_KEYDOWN) {
-                if (e.key.keysym.sym == SDLK_SPACE) safeMode ^= 1;
+                if (e.key.keysym.sym == SDLK_SPACE) safeMode ^= 1, plane->setSafeMode(safeMode);
             }
             plane->handleInputAction(e);
             aim->handleInputAction(e);
         }
+
         clearScreen();
         applyTexture(background, 0, 0, SCREEN_WIDTH);
         heartPointMain->show(plane->getHeartPoint());
         heartPointBoss->show(boss->getHeartPoint());
-        plane->handleMove(elapsedTime);
-        plane->setSafeMode(safeMode);
-        plane->showShield();
-        plane->show();
-        plane->makeBullet(elapsedTime);
         aim->show();
-        scoreText->setText(("Score: " + to_string(score)).c_str());
+        scoreText->setText(("Score: " + to_string(getScore())).c_str());
         scoreText->show(800, 10);
-        if (heart->getIsMove() && checkCollision(heart->getRect(), plane->getRect())) {
-            playSound(pop);
-            heart->setIsMove(false);
-            plane->regen();
-        }
         heart->handleMove(elapsedTime);
         if (heart->getIsMove()) heart->show();
-        if (shield->getIsMove() && checkCollision(shield->getRect(), plane->getRect())) {
-            playSound(pop);
-            shield->setIsMove(false);
-            plane->activeShield();
-        }
         shield->handleMove(elapsedTime);
-        if (shield->getIsMove()) shield->show();
-
-        boss->scan(plane->getRect().x, plane->getRect().y);
-        boss->handleMove(elapsedTime);
-        boss->transit();
-        boss->show();
+        if (shield->getIsMove()) shield->show();    
+        plane->makeBullet(elapsedTime);
+        if (plane->getActive()) {
+            plane->handleMove(elapsedTime);
+            plane->showShield();
+            plane->show();
+            if (heart->getIsMove() && checkCollision(heart->getRect(), plane->getRect())) {
+                playSound(pop);
+                heart->setIsMove(false);
+                plane->regen();
+            }
+            if (shield->getIsMove() && checkCollision(shield->getRect(), plane->getRect())) {
+                playSound(pop);
+                shield->setIsMove(false);
+                plane->activeShield();
+            }
+            std::vector<bulletObject*> bulletList = plane->getBulletList();
+            for (int j = 0; j < bulletList.size(); ++j) {
+                bulletObject* bullet = bulletList.at(j);
+                if (checkCollision(bullet->getRect(), boss->getRect())) {
+                    playSound(bossHurt);
+                    explode(boss, true);
+                    if (boss->shooted()) {
+                        playSound(bossDeath);
+                        haltSound(lastTheme);
+                        playSound(siuu);
+                        endGame();
+                        return 1;
+                    }
+                    gainScore();
+                    bulletList.erase(bulletList.begin() + j);
+                    delete(bullet); bullet = nullptr;
+                    break;
+                }
+            }
+            plane->setBulletList(bulletList);
+        }
         boss->makeBullet(elapsedTime);
-        boss->regen();
-        std::vector<bulletObject*> bulletList = plane->getBulletList();
-        bool destroyed = false;
-        for (int j = 0; j < bulletList.size(); ++j) {
-            bulletObject* bullet = bulletList.at(j);
-            if (checkCollision(bullet->getRect(), boss->getRect())) {
-                playSound(bossHurt);
-                explode(boss, 32);
-                if (boss->shooted()) {
-                    playSound(bossDeath);
-                    haltSound(lastTheme);
-                    playSound(siuu);
-                    endGame();
-                    newScore = score;
-                    return 1;
+        if (boss->getActive()) {
+            boss->scan(plane->getRect().x, plane->getRect().y);
+            boss->handleMove(elapsedTime);
+            boss->transit();
+            boss->show();
+            boss->regen();
+            std::vector<bulletObject*> bulletList = boss->getBulletList();
+            for (int j = 0; j < bulletList.size(); ++j) {
+                bulletObject* bullet = bulletList.at(j);
+                if (checkCollision(bullet->getRect(), plane->getRect())) {
+                    playSound(bomb);
+                    explode(plane, false);
+                    if (!safeMode && !plane->checkShield() && plane->shooted()) {
+                        haltSound(lastTheme);
+                        playSound(mainDeath);
+                        endGame();
+                        return 0;
+                    }
+                    bulletList.erase(bulletList.begin() + j);
+                    delete(bullet); bullet = nullptr;
                 }
-                ++score;
-                bulletList.erase(bulletList.begin() + j);
-                destroyed = true;
-                break;
             }
+            boss->setBulletList(bulletList);
         }
-        plane->setBulletList(bulletList);
-        if (destroyed) continue;
         
-        bulletList = boss->getBulletList();
-        for (int j = 0; j < bulletList.size(); ++j) {
-            bulletObject* bullet = bulletList.at(j);
-            if (checkCollision(bullet->getRect(), plane->getRect())) {
-                playSound(bomb);
-                explode(plane, 1);
-                if (!plane->checkSafeMode() && !plane->checkShield() && plane->shooted()) {
-                    haltSound(lastTheme);
-                    playSound(mainDeath);
-                    endGame();
-                    newScore = score;
-                    return 0;
-                }
-                bulletList.erase(bulletList.begin() + j);
-            }
-        }
-        boss->setBulletList(bulletList);
         for (int i = 0; i < explosions.size(); ++i) {
             explosionObject* exp = explosions.at(i);
-            if (exp->completed()) explosions.erase(explosions.begin() + i);
-            else {
+            if (exp->completed()) {
+                exp->getObject()->setActive(true);
+                explosions.erase(explosions.begin() + i);
+                delete exp; exp = nullptr;
+            } else {
                 exp->show();
                 exp->nextFrame();
             }

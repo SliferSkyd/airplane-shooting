@@ -2,7 +2,7 @@
 
 baseObject::baseObject() {
     rect.x = 0; rect.y = 0;
-    angle = 0; 
+    angle = 0; active = 1;
     texture = NULL;
 }
 

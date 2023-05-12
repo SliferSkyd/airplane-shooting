@@ -5,7 +5,7 @@ bonusObject::bonusObject() {
 }
 
 bonusObject::~bonusObject() {
-
+    
 }
 
 void bonusObject::handleMove(const double& elapsedTime) {

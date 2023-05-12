@@ -5,7 +5,7 @@ textObject::textObject() {
 }
 
 textObject::~textObject() {
-
+    
 }
 
 void textObject::setColor(const int& type) {

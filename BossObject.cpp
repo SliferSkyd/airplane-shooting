@@ -19,13 +19,15 @@ void bossObject::initBullet() {
 
     for (int i = -2; i <= 2; ++i) {
         bulletObject* bullet = new bulletObject();
-        bullet->loadImage("data/image/boss_bullet.png");
+        bullet->loadImage("data/image/fire.png");
+        bullet->setType(bulletObject::FIRE);
         bullet->setSpeed(-15);
         bullet->setAngle(angle + GAP * i);
         bullet->setRect(rect.x - rect.w / numFrames / 2 * cos(angle), rect.y + rect.h * 3 / 4 - rect.w / numFrames / 2 * sin(angle));
         bullet->setIsMove(true);
         bulletList.push_back(bullet);
     }
+    playSound(bossBreath);
 }
 
 void bossObject::transit() {

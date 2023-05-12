@@ -1,7 +1,7 @@
 #include "ExplosionObject.h"
 
 explosionObject::explosionObject() {
-
+    
 }
 
 explosionObject::~explosionObject() {
@@ -24,6 +24,7 @@ void explosionObject::show() {
 }
 
 void explosionObject::burn(baseObject* object, int numDup) {
+    this->object = object;
     int x = object->getRect().x + object->getRect().w / numDup / 2 - clip[frame].w / 2;
     int y = object->getRect().y + object->getRect().h / 2 - clip[frame].h / 2;
     setRect(x, y);

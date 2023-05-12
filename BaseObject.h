@@ -20,17 +20,24 @@ public:
     SDL_Rect getRect() const {
         return rect;
     }
-    SDL_Texture* getObject() {
+    SDL_Texture* getObject() const {
         return texture;
     }
     void setSpeed(const int& speed) {
         this->speed = speed;
+    }
+    void setActive(const bool& active) {
+        this->active = active;
+    }
+    bool getActive() const {
+        return active;
     }
 protected:
     SDL_Rect rect;
     SDL_Texture* texture; 
     double angle;
     int speed;
+    bool active;
 };
 
 #endif
