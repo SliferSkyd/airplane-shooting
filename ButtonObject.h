@@ -15,13 +15,13 @@ public:
     }
     bool isClicked(const SDL_Event& e);
     void show();
-    void setSize(const int& w0, const int& h0, const int& w1, const int& h1) {
-        w[0] = w0, h[0] = h0;
-        w[1] = w1, h[1] = h1;
+    void setSize() {
+        w = rect.w, h = rect.h;
     }
 private: 
-    std::array<int, 2> w, h;
+    int w, h;
     int xVal, yVal;
+    const double ratio = 1.2;
 };
 
 #endif

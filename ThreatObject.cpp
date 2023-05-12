@@ -7,7 +7,7 @@ threatObject::threatObject() {
 threatObject::~threatObject() {
     while (bulletList.size()) {
         bulletObject* bullet = bulletList.at(0);
-        delete bullet; bullet = nullptr;
+        clear(bullet); bullet = nullptr;
         bulletList.erase(bulletList.begin());
     }
 }
@@ -48,7 +48,7 @@ void threatObject::makeBullet(const double& elapsedTime) {
             } else {
                 if (bullet != NULL) {
                     bulletList.erase(bulletList.begin() + i);
-                    delete bullet; bullet = NULL;
+                    clear(bullet); bullet = NULL;
                 }
             }
         }

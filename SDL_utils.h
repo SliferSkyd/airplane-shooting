@@ -29,35 +29,17 @@ static SDL_Renderer* renderer = NULL;
 static std::vector<Mix_Chunk*> sound;
 static std::vector<std::string> pathSound = {"laser", "sphere", "explosion", "bomb", "victory", "defeat", "pop", "theme", "intro", "siuu", "success", "mainDeath", "ready", "bossHurt", "lastTheme", "bossDeath", "bossBreath", "rocket"};
 
-static bool safeMode = false;
-static int score = 0;
-
-static void switchSafeMode() {
-    safeMode ^= 1;
-}
-
-static int getSafeMode() {
-    return safeMode;
-}
-
-static void gainScore() {
-    ++score;
-}
-
-static void resetScore() {
-    score = 0;
-}
-
-static int getScore() {
-    return score;
-}
-
 enum soundEffect {
     laser = 0, sphere = 1, explosion = 2, bomb = 3, victory = 4, 
     defeat = 5, pop = 6, theme = 7, intro = 8, siuu = 9, 
     success = 10, mainDeath = 11, ready = 12, bossHurt = 13, lastTheme = 14,
     bossDeath = 15, bossBreath = 16, rocket = 17
 };
+
+template <typename T>
+void clear(T x) {
+    if (x != nullptr) delete x;
+}
 
 void logSDLError(std::ostream& os, const std::string &msg, bool fatal = false);
 void initSDL();

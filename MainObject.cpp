@@ -3,15 +3,14 @@
 mainObject::mainObject() {
     shield = new baseObject();
     hasShield = false;
-    won = false;
-    safeMode = 0;
-    heartPoint = 5;
+    won = false; safe = false;
+    heartPoint = 5; currentType = 0;
 }
 
 mainObject::~mainObject() {
     while (bulletList.size()) {
         bulletObject* bullet = bulletList.at(0);
-        delete bullet; bullet = nullptr;
+        clear(bullet); bullet = nullptr;
         bulletList.erase(bulletList.begin());
     }
 }
@@ -88,7 +87,7 @@ void mainObject::makeBullet(const double& elapsedTime) {
             } else {
                 if (bullet != NULL) {
                     bulletList.erase(bulletList.begin() + i);
-                    delete bullet; bullet = NULL;
+                    clear(bullet); bullet = NULL;
                 }
             }
         }
@@ -100,7 +99,7 @@ void mainObject::loadShieldImage(const std::string& path) {
 }
 
 void mainObject::showShield() {
-    if (!hasShield && !safeMode) return;
+    if (!hasShield && !safe) return;
     int x = rect.x + rect.w / 2 - shield->getRect().w / 2;
     int y = rect.y + rect.h / 2 - shield->getRect().h / 2;
     shield->setRect(x, y);

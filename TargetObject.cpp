@@ -1,14 +1,14 @@
-#include "target.h"
+#include "targetObject.h"
 
-target::target() {
-
-}
-
-target::~target() {
+targetObject::targetObject() {
 
 }
 
-void target::handleInputAction(SDL_Event events) {
+targetObject::~targetObject() {
+
+}
+
+void targetObject::handleInputAction(SDL_Event events) {
     if (events.type == SDL_MOUSEMOTION) {
         int x, y;
         SDL_GetMouseState(&x, &y);

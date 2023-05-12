@@ -32,15 +32,21 @@ public:
     int getHeartPoint() {
         return heartPoint;
     }
-    void setSafeMode(const bool& safeMode) {
-        this->safeMode = safeMode;
+    void setSafe(const bool& safe) {
+        this->safe = safe;
+    }
+    void nextType() {
+        currentType = (currentType + 1) % numTypes;
+        loadImage(("data/image/plane" + to_string(currentType) + ".png").c_str());
     }
 private:    
     std::vector<bulletObject*> bulletList;
     std::chrono::system_clock::time_point lastBullet, lastShield; 
     baseObject *shield;
-    bool hasShield, won, safeMode;
+    bool hasShield, won, safe;
     int heartPoint;
+    int currentType;
+    const int numTypes = 2;
 };
 
 #endif

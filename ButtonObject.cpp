@@ -12,12 +12,12 @@ void buttonObject::handleMove(SDL_Rect rect) {
     int x, y;
     SDL_GetMouseState(&x, &y);
     if (checkCollision(this->rect, rect)) {
-        if (this->rect.w == w[0] && this->rect.h == h[0]) playSound(6);
-        this->rect.w = w[1];
-        this->rect.h = h[1];
+        if (this->rect.w == w && this->rect.h == h) playSound(6);
+        this->rect.w = w * ratio;
+        this->rect.h = h * ratio;
     } else {
-        this->rect.w = w[0];
-        this->rect.h = h[0];
+        this->rect.w = w;
+        this->rect.h = h;
     }    
     this->rect.x = xVal - this->rect.w / 2;
     this->rect.y = yVal - this->rect.h / 2;
