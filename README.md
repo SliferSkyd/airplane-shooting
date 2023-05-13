@@ -8,7 +8,6 @@ Clone this project or download directly [here](https://github.com/SliferSkyd/air
 
 The executable file is called `main`. 
 
-### Window:
 Tested in Window 10. 
 
 Double-click on the executable file to run.
@@ -18,10 +17,6 @@ If you want to change anything in my code, recompile by this command:
 ```
 mingw32-make
 ```
-
-### Linux:
-Tested in Linux ...
-
 
 **NOTE**: Other OS haven't be considered yet.
 
