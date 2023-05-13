@@ -13,7 +13,7 @@ Tested in Window 10.
 
 Double-click on the executable file to run.
 
-If you want to change anything in my code. Recompile the game by this command:
+If you want to change anything in my code, recompile by this command:
 
 ```
 mingw32-make
@@ -33,7 +33,7 @@ Use your mouse and keyboard to interact with the game.
 
 This game contains 3 small levels and a final level. During first 3 levels, the number of enemies is increasing and in the last level, you have to fight with a boss.
 
-Initally, you have 5 health points and this will reset whenever you come to another level. Each time being burnt or collide with an enemy, your health point is decreased by 1 and if there is none, you lose. 
+Initally, you have 5 health points and it will reset when you pass the current level. Each time being burnt or collide with an enemy, your health point is decreased by 1 and if it reaches 0, you will lose. 
 
 There are two types of enemy. Some of them will follow you no matter where you are and you can only advoid by kill it before being killed. Meanwhile, the rest simply move in a straight line.   
 
@@ -41,11 +41,11 @@ The boss (dragon) has 10 health points and they always breathe 5 fire balls at o
 
 Besides, some bonus items may be helpful that you can collect them during the game:
 - Heart: heal 1 health point
-- Shield: protect you for 5 seconds (maybe?)
-- Nuclear Bomb: give you a time to shot 5 bullets at once. It's quite hard to explain so experience it in the game.
+- Shield: advoid you from all damage for 5 seconds (maybe?)
+- Nuclear Bomb: allow you to shot 5 bullets simultaneously. It's quite hard to explain, therefore experience it in the game.
 
 **NOTE**: Additional features for testers:
-- `SPACE` to open the infinity shield to advoid all damage. 
+- `SPACE` to turn on/ off safe mode so you have unlimited time shield and  
 - `BACKSPACE` to pass the current level immediately. 
 
 Please don't use these keys to enjoy my game to the fullest. Good luck and have fun!
@@ -55,14 +55,12 @@ This game project was made entirely by me, following the instructions from:
 - [Lazyfoo](https://lazyfoo.net) for SDL2 tutorials.
 - [Phattrienphanmem123az](https://phattrienphanmem123az.com) to build basic game features.  
 
-Images, sounds and font types are downloaded from free sources.  
+All images, sounds and font types are downloaded from free sources.  
 
 ## Contributing
 Due to being my first game project, it might be exist some bugs. If you find any, please feedback to me.
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
 
 ## License
 
