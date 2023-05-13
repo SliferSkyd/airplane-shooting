@@ -38,7 +38,7 @@ enum soundEffect {
 
 template <typename T>
 void clear(T x) {
-    if (x != nullptr) delete x;
+    if (x != nullptr) free(x);
 }
 
 void logSDLError(std::ostream& os, const std::string &msg, bool fatal = false);

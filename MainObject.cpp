@@ -4,7 +4,7 @@ mainObject::mainObject() {
     shield = new baseObject();
     hasShield = false;
     won = false; safe = false;
-    heartPoint = 5; currentType = 0;
+    heartPoint = 5; currentType = 0; nuclear = 0;
 }
 
 mainObject::~mainObject() {
@@ -62,6 +62,7 @@ void mainObject::handleInputAction(SDL_Event events) {
             bullet->setIsMove(true);
             bulletList.push_back(bullet);
         } else {
+            if (!safe && !nuclear) return;
             const double GAP = 0.1;
             for (int i = -2; i <= 2; ++i) {
                 bulletObject* bullet = new bulletObject();
@@ -73,6 +74,7 @@ void mainObject::handleInputAction(SDL_Event events) {
                 bullet->setIsMove(true);
                 bulletList.push_back(bullet);
             }
+            if (!safe) --nuclear;
         }
     }
 }

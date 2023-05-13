@@ -8,13 +8,17 @@ level::level() {
     heartPoint = new heartPointObject();
     heart = new bonusObject();
     shield = new bonusObject();
+    nuclear = new bonusObject();
+    nuclearIcon = new baseObject();
     scoreText = new textObject();
+    nuclearText = new textObject();
     safe = false;
 }
 
 level::~level() {
     clear(plane); clear(aim); clear(heartPoint); 
     clear(heart); clear(shield); clear(scoreText);
+    clear(nuclear); clear(nuclearIcon); clear(nuclearText);
     for (int i = 0; enemies.size(); ) {
         threatObject* enemy = enemies.at(i);
         enemies.erase(enemies.begin());
@@ -53,18 +57,19 @@ void level::init(int& score, int idLevel, int numThreat, int numHasRadar, int sp
     shield->loadImage("data/image/shield_item.png"); 
     shield->setDuration(15); shield->setSpeed(300);
 
+    nuclear->loadImage("data/image/nuclear_item.png");
+    nuclear->setDuration(17); nuclear->setSpeed(300);
+
+    nuclearIcon->loadImage("data/image/nuclear.png");
+    nuclearIcon->setRect(40, 60);
+
     scoreText->loadFont("data/font/blacknorth.ttf", 40);
     scoreText->setColor(textObject::BROWN);
-}
+    scoreText->setPosition(450, 10);
 
-void level::gameOver(int& score) {
-    clearScreen();
-    applyTexture(background, bkg, 0, SCREEN_WIDTH);
-    heartPoint->show(plane->getHeartPoint());
-    scoreText->setText(("Score: " + to_string(score)).c_str());
-    scoreText->show(450, 10);
-    show();
-    playSound(5);
+    nuclearText->loadFont("data/font/blacknorth.ttf", 30);
+    nuclearText->setColor(textObject::ORANGE);    
+    nuclearText->setPosition(80, 70);
 }
 
 void level::startGame(int& score) {
@@ -72,16 +77,20 @@ void level::startGame(int& score) {
     levelText->loadFont("data/font/DripOctober.ttf", 150);
     levelText->setText(("Level " + to_string(idLevel)).c_str());
     levelText->setColor(textObject::RED);
+    levelText->setPosition(200, 200);
     playSound(ready);
     for (int i = 0; i < 256; i += 2) {
         SDL_SetTextureAlphaMod(background, i);
         clearScreen();
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
         heartPoint->show(plane->getHeartPoint());
+        nuclearIcon->show();
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
-        scoreText->show(450, 10);
-        levelText->show(200, 200, 255 - i);
+        scoreText->show();
+        nuclearText->setText(to_string(plane->getNuclear()));
+        nuclearText->show();
+        levelText->show(255 - i);
         show();
     }
 }
@@ -92,14 +101,18 @@ void level::endGame(int& score) {
         clearScreen();
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
         heartPoint->show(plane->getHeartPoint());
+        nuclearIcon->show();
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
-        scoreText->show(450, 10);
+        scoreText->show();
+        nuclearText->setText(to_string(plane->getNuclear()));
+        nuclearText->show();
         show();
     }
 }
 
-int level::run(int& score) {
+int level::run(int& score, int& nuclearBombs) {
+    plane->setNuclear(nuclearBombs);
     std::vector<explosionObject*> explosions;
     auto explode = [&](baseObject* object, bool nuclear) {
         explosionObject* exp = new explosionObject(); 
@@ -131,14 +144,15 @@ int level::run(int& score) {
         }
         clearScreen();
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
+        
         heartPoint->show(plane->getHeartPoint());
-        plane->handleMove(elapsedTime);
-        plane->showShield();
-        plane->show();
-        plane->makeBullet(elapsedTime);
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
-        scoreText->show(450, 10);
+        scoreText->show();
+        nuclearText->setText(to_string(plane->getNuclear()));
+        nuclearText->show();    
+        nuclearIcon->show();
+
         if (heart->getIsMove() && checkCollision(heart->getRect(), plane->getRect())) {
             playSound(pop);
             heart->setIsMove(false);
@@ -146,6 +160,7 @@ int level::run(int& score) {
         }
         heart->handleMove(elapsedTime);
         if (heart->getIsMove()) heart->show();
+
         if (shield->getIsMove() && checkCollision(shield->getRect(), plane->getRect())) {
             playSound(pop);
             shield->setIsMove(false);
@@ -153,6 +168,19 @@ int level::run(int& score) {
         }
         shield->handleMove(elapsedTime);
         if (shield->getIsMove()) shield->show();
+
+        if (nuclear->getIsMove() && checkCollision(nuclear->getRect(), plane->getRect())) {
+            playSound(pop);
+            nuclear->setIsMove(false);
+            plane->gainNuclear();
+        }
+        nuclear->handleMove(elapsedTime);
+        if (nuclear->getIsMove()) nuclear->show();
+
+        plane->handleMove(elapsedTime);
+        plane->showShield();
+        plane->show();
+        plane->makeBullet(elapsedTime);
         for (int i = 0; i < enemies.size(); ++i) {
             threatObject* enemy = enemies.at(i);
             enemy->scan(plane->getRect().x, plane->getRect().y);
@@ -198,6 +226,7 @@ int level::run(int& score) {
                     haltSound(theme);
                     playSound(mainDeath);
                     endGame(score);
+                    nuclearBombs = plane->getNuclear();
                     return 0; // lost
                 }
             }
@@ -214,6 +243,7 @@ int level::run(int& score) {
                         haltSound(theme);
                         playSound(mainDeath);
                         endGame(score);
+                        nuclearBombs = plane->getNuclear();
                         return 0; // lost
                     }
                 }
@@ -243,5 +273,6 @@ int level::run(int& score) {
     haltSound(theme);
     playSound(siuu);
     endGame(score);
+    nuclearBombs = plane->getNuclear();
     return 1; // won
 }

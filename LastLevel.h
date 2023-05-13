@@ -4,7 +4,7 @@
 #include "MainObject.h"
 #include "BossObject.h"
 #include "ExplosionObject.h"
-#include "HPObject.h"
+#include "HeartPointObject.h"
 #include "BonusObject.h"
 #include "TextObject.h"
 #include "TargetObject.h"
@@ -17,16 +17,15 @@ class lastLevel {
     SDL_Texture *background;
     heartPointObject *heartPointMain;
     heartPointObject *heartPointBoss;
-    bonusObject *heart;
-    bonusObject *shield;
-    textObject *scoreText;
+    bonusObject *heart, *shield, *nuclear;
+    baseObject *nuclearIcon;
+    textObject *scoreText, *nuclearText;
     bool safe;
 public:
     lastLevel();
     ~lastLevel();
     void init(int& score, int speedMain, int speedBoss);
-    void gameOver(int& score);
-    int run(int& score);
+    int run(int& score, int& nuclearBombs);
     void startGame(int& score);
     void endGame(int& score);
     const int MAX_LEN = 1778;

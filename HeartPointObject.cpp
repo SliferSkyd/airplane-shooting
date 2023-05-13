@@ -1,4 +1,4 @@
-#include "HPObject.h"
+#include "HeartPointObject.h"
 
 heartPointObject::heartPointObject() {
 

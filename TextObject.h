@@ -7,7 +7,7 @@ using namespace std;
 class textObject: public baseObject {
 public:
     enum textColor {
-        BLACK = 0, RED = 1, BLUE = 2, GREEN = 3, WHITE = 4, BROWN = 5
+        BLACK = 0, RED = 1, BLUE = 2, GREEN = 3, WHITE = 4, BROWN = 5, ORANGE = 6
     };
     textObject();
     ~textObject();
@@ -15,13 +15,15 @@ public:
     void setText(const std::string& text) {
         this->text = text;
     }
+    void setPosition(const int& x, const int& y);
     void setColor(const int& type);
-    void show(const int& x, const int& y, int opacity = 255);
+    void show(int opacity = 255);
     void loadFont(const std::string& path, const int& size);
 private: 
     std::string text;
     SDL_Color color;
     TTF_Font* font = NULL;
+    int x, y;
 };
 
 #endif

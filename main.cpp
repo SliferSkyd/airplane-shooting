@@ -75,13 +75,14 @@ int runScreenVictory() {
     scoreText->loadFont("data/font/ComicShark.ttf", 50);
     scoreText->setText(("Your score: " + to_string(score)).c_str());
     scoreText->setColor(textObject::BLUE);
+    scoreText->setPosition(335, 325);
     int opacity = 0;
     int deltaOpacity = 2;
     auto renderTextScore = [&]() {
         opacity += deltaOpacity;
         if (opacity >= 256) opacity = 255, deltaOpacity *= -1;
         else if (opacity < 0) opacity = 0, deltaOpacity *= -1;
-        scoreText->show(335, 325, opacity);
+        scoreText->show(opacity);
     };
 
     while (1) {
@@ -130,13 +131,14 @@ int runScreenDefeat() {
     scoreText->loadFont("data/font/ComicShark.ttf", 50);
     scoreText->setText(("Your score: " + to_string(score)).c_str());
     scoreText->setColor(textObject::BLUE);
+    scoreText->setPosition(335, 325);
     int opacity = 0;
     int deltaOpacity = 2;
     auto renderTextScore = [&]() {
         opacity += deltaOpacity;
         if (opacity >= 256) opacity = 255, deltaOpacity *= -1;
         else if (opacity < 0) opacity = 0, deltaOpacity *= -1;
-        scoreText->show(335, 325, opacity);
+        scoreText->show(opacity);
     };
 
     while (1) {
@@ -173,11 +175,11 @@ int main(int argc, char ** argv) {
         std::vector<std::pair<int, int>> s = {{1, 1}, {2, 1}, {3, 1}};
         haltSound(intro);
         if (option == 1) {
-            int noob = 0;
+            int noob = 0, nuclearBombs = 0;
             for (int i = 0; i < s.size(); ++i) {
                 level currentLevel;
                 currentLevel.init(score, i + 1, s[i].first, s[i].second, 300, 250);
-                if (!currentLevel.run(score)) {
+                if (!currentLevel.run(score, nuclearBombs)) {
                     noob = 1;
                     break;             
                 } 
@@ -185,7 +187,7 @@ int main(int argc, char ** argv) {
             if (!noob) {
                 lastLevel currentLevel;
                 currentLevel.init(score, 300, 1000);
-                if (!currentLevel.run(score)) noob = 1;
+                if (!currentLevel.run(score, nuclearBombs)) noob = 1;
             }
             if (noob) {
                 if (runScreenDefeat()) continue;

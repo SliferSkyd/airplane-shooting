@@ -39,12 +39,21 @@ public:
         currentType = (currentType + 1) % numTypes;
         loadImage(("data/image/plane" + to_string(currentType) + ".png").c_str());
     }
+    void gainNuclear() {
+        ++nuclear;
+    }
+    int getNuclear() {
+        return nuclear;
+    }
+    void setNuclear(int nuclear) {
+        this->nuclear = nuclear;
+    }
 private:    
     std::vector<bulletObject*> bulletList;
     std::chrono::system_clock::time_point lastBullet, lastShield; 
     baseObject *shield;
     bool hasShield, won, safe;
-    int heartPoint;
+    int heartPoint, nuclear;
     int currentType;
     const int numTypes = 2;
 };

@@ -9,15 +9,18 @@ lastLevel::lastLevel() {
     heartPointBoss = new heartPointObject();
     heart = new bonusObject();
     shield = new bonusObject();
+    nuclear = new bonusObject();
+    nuclearIcon = new baseObject();
     scoreText = new textObject();
-
+    nuclearText = new textObject();
     safe = false;
 }
 
 lastLevel::~lastLevel() {
     clear(plane);  clear(aim); clear(heartPointMain);
     clear(heartPointBoss); clear(heart); clear(shield); 
-    clear(scoreText); clear(boss);
+    clear(scoreText); clear(boss); clear(nuclear);
+    clear(nuclearIcon); clear(nuclearText);
 }
 
 void lastLevel::init(int& score, int speedMain, int speedBoss) {
@@ -44,20 +47,20 @@ void lastLevel::init(int& score, int speedMain, int speedBoss) {
 
     shield->setDuration(15); shield->setSpeed(300);
     shield->loadImage("data/image/shield_item.png");  
+   
+    nuclear->loadImage("data/image/nuclear_item.png");
+    nuclear->setDuration(17); nuclear->setSpeed(300);
+
+    nuclearIcon->loadImage("data/image/nuclear.png");
+    nuclearIcon->setRect(40, 60);
 
     scoreText->loadFont("data/font/blacknorth.ttf", 40);
     scoreText->setColor(textObject::BROWN);
-}
+    scoreText->setPosition(450, 10);
 
-void lastLevel::gameOver(int& score) {
-    clearScreen();
-    applyTexture(background, 0, 0, SCREEN_WIDTH);
-    heartPointMain->show(plane->getHeartPoint());
-    heartPointBoss->show(boss->getHeartPoint());
-    scoreText->setText(("Score: " + to_string(score)).c_str());
-    scoreText->show(450, 10);
-    show();
-    playSound(5);
+    nuclearText->loadFont("data/font/blacknorth.ttf", 30);
+    nuclearText->setColor(textObject::ORANGE);    
+    nuclearText->setPosition(80, 70);
 }
 
 void lastLevel::startGame(int& score) {
@@ -65,6 +68,7 @@ void lastLevel::startGame(int& score) {
     levelText->loadFont("data/font/DripOctober.ttf", 150);
     levelText->setText("Last Level");
     levelText->setColor(textObject::RED);
+    levelText->setPosition(50, 200);
     playSound(ready);
     for (int i = 0; i < 256; i += 2) {
         SDL_SetTextureAlphaMod(background, i);
@@ -72,10 +76,13 @@ void lastLevel::startGame(int& score) {
         applyTexture(background, 0, 0, SCREEN_WIDTH);
         heartPointMain->show(plane->getHeartPoint());
         heartPointBoss->show(boss->getHeartPoint());
+        nuclearIcon->show();
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
-        scoreText->show(450, 10);
-        levelText->show(50, 200, 255 - i);
+        scoreText->show();
+        nuclearText->setText(to_string(plane->getNuclear()));
+        nuclearText->show();
+        levelText->show(255 - i);
         show();
     }
 }
@@ -87,14 +94,18 @@ void lastLevel::endGame(int& score) {
         applyTexture(background, 0, 0, SCREEN_WIDTH);
         heartPointMain->show(plane->getHeartPoint());
         heartPointBoss->show(boss->getHeartPoint());
+        nuclearIcon->show();
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
-        scoreText->show(450, 10);
+        scoreText->show();
+        nuclearText->setText(to_string(plane->getNuclear()));
+        nuclearText->show();
         show();
     }
 }
 
-int lastLevel::run(int& score) {
+int lastLevel::run(int& score, int& nuclearBombs) {
+    plane->setNuclear(nuclearBombs);
     std::vector<explosionObject*> explosions;
     auto explode = [&](baseObject* object, bool isBoss) {
         explosionObject* exp = new explosionObject(); 
@@ -123,19 +134,26 @@ int lastLevel::run(int& score) {
             plane->handleInputAction(e);
             aim->handleInputAction(e);
         }
-
         clearScreen();
         applyTexture(background, 0, 0, SCREEN_WIDTH);
+        
         heartPointMain->show(plane->getHeartPoint());
         heartPointBoss->show(boss->getHeartPoint());
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
-        scoreText->show(450, 10);
+        scoreText->show();
+        nuclearText->setText(to_string(plane->getNuclear()));
+        nuclearText->show();
+        nuclearIcon->show();
+        
         heart->handleMove(elapsedTime);
         if (heart->getIsMove()) heart->show();
         shield->handleMove(elapsedTime);
         if (shield->getIsMove()) shield->show();    
+        nuclear->handleMove(elapsedTime);
+        if (nuclear->getIsMove()) nuclear->show();
         plane->makeBullet(elapsedTime);
+        
         if (plane->getActive()) {
             plane->handleMove(elapsedTime);
             plane->showShield();
@@ -149,6 +167,11 @@ int lastLevel::run(int& score) {
                 playSound(pop);
                 shield->setIsMove(false);
                 plane->activeShield();
+            }
+            if (nuclear->getIsMove() && checkCollision(nuclear->getRect(), plane->getRect())) {
+                playSound(pop);
+                nuclear->setIsMove(false);
+                plane->gainNuclear();
             }
             std::vector<bulletObject*> bulletList = plane->getBulletList();
             for (int j = 0; j < bulletList.size(); ++j) {
