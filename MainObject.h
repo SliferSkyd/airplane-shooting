@@ -28,9 +28,9 @@ public:
         won = true;
     }
     int shooted();
-    void regen();
-    int getHeartPoint() {
-        return heartPoint;
+    void heal();
+    int gethealthPoint() {
+        return healthPoint;
     }
     void setSafe(const bool& safe) {
         this->safe = safe;
@@ -53,7 +53,7 @@ private:
     std::chrono::system_clock::time_point lastBullet, lastShield; 
     baseObject *shield;
     bool hasShield, won, safe;
-    int heartPoint, nuclear;
+    int healthPoint, nuclear;
     int currentType;
     const int numTypes = 2;
 };

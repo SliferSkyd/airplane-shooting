@@ -40,15 +40,15 @@ void bossObject::transit() {
 }
 
 int bossObject::shooted() {
-    --heartPoint;
-    return (heartPoint == 0);
+    --healthPoint;
+    return (healthPoint == 0);
 }
 
-void bossObject::regen() {
+void bossObject::heal() {
     std::chrono::system_clock::time_point curTime = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = curTime - lastRegen;
-    if (elapsed_seconds.count() < durationRegen) return;
-    lastRegen = curTime;
-    ++heartPoint;
-    if (heartPoint > 10) heartPoint = 10;
+    std::chrono::duration<double> elapsed_seconds = curTime - lastHeal;
+    if (elapsed_seconds.count() < durationHeal) return;
+    lastHeal = curTime;
+    ++healthPoint;
+    if (healthPoint > 10) healthPoint = 10;
 }

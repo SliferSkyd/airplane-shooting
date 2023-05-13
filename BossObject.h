@@ -15,15 +15,15 @@ public:
     void transit();
     void initBullet();
     int shooted();
-    void regen();
-    int getHeartPoint() {
-        return heartPoint;
+    void heal();
+    int gethealthPoint() {
+        return healthPoint;
     }
 private:
     const double durationBurn = 0.03125;
-    const double durationRegen = 7;
-    std::chrono::system_clock::time_point lastTransition, lastRegen;
-    int heartPoint = 10;
+    const double durationHeal = 7;
+    std::chrono::system_clock::time_point lastTransition, lastHeal;
+    int healthPoint = 10;
 };
 
 #endif

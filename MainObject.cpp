@@ -4,7 +4,7 @@ mainObject::mainObject() {
     shield = new baseObject();
     hasShield = false;
     won = false; safe = false;
-    heartPoint = 5; currentType = 0; nuclear = 0;
+    healthPoint = 5; currentType = 0; nuclear = 0;
 }
 
 mainObject::~mainObject() {
@@ -120,11 +120,11 @@ void mainObject::activeShield() {
 }
 
 int mainObject::shooted() {
-    --heartPoint;
-    return (heartPoint <= 0);
+    --healthPoint;
+    return (healthPoint <= 0);
 }
 
-void mainObject::regen() {
-    ++heartPoint;
-    if (heartPoint > 5) heartPoint = 5;
+void mainObject::heal() {
+    ++healthPoint;
+    if (healthPoint > 5) healthPoint = 5;
 }

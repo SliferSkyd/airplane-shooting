@@ -4,7 +4,7 @@
 #include "MainObject.h"
 #include "ThreatObject.h"
 #include "ExplosionObject.h"
-#include "HeartPointObject.h"
+#include "healthPointObject.h"
 #include "BonusObject.h"
 #include "TextObject.h"
 #include "TargetObject.h"
@@ -15,8 +15,8 @@ class level {
     std::vector<threatObject*> enemies;
     targetObject *aim;
     SDL_Texture *background;
-    heartPointObject *heartPoint;
-    bonusObject *heart, *shield, *nuclear;
+    healthPointObject *healthPoint;
+    bonusObject *health, *shield, *nuclear;
     baseObject *nuclearIcon;
     textObject *scoreText, *nuclearText;
     int bkg, idLevel;

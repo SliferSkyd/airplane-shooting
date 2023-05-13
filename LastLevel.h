@@ -4,7 +4,7 @@
 #include "MainObject.h"
 #include "BossObject.h"
 #include "ExplosionObject.h"
-#include "HeartPointObject.h"
+#include "healthPointObject.h"
 #include "BonusObject.h"
 #include "TextObject.h"
 #include "TargetObject.h"
@@ -15,9 +15,9 @@ class lastLevel {
     bossObject *boss;
     targetObject *aim;
     SDL_Texture *background;
-    heartPointObject *heartPointMain;
-    heartPointObject *heartPointBoss;
-    bonusObject *heart, *shield, *nuclear;
+    healthPointObject *healthPointMain;
+    healthPointObject *healthPointBoss;
+    bonusObject *health, *shield, *nuclear;
     baseObject *nuclearIcon;
     textObject *scoreText, *nuclearText;
     bool safe;

@@ -5,9 +5,9 @@ lastLevel::lastLevel() {
     boss = new bossObject();
     aim = new targetObject();
     
-    heartPointMain = new heartPointObject();
-    heartPointBoss = new heartPointObject();
-    heart = new bonusObject();
+    healthPointMain = new healthPointObject();
+    healthPointBoss = new healthPointObject();
+    health = new bonusObject();
     shield = new bonusObject();
     nuclear = new bonusObject();
     nuclearIcon = new baseObject();
@@ -17,15 +17,15 @@ lastLevel::lastLevel() {
 }
 
 lastLevel::~lastLevel() {
-    clear(plane);  clear(aim); clear(heartPointMain);
-    clear(heartPointBoss); clear(heart); clear(shield); 
+    clear(plane);  clear(aim); clear(healthPointMain);
+    clear(healthPointBoss); clear(health); clear(shield); 
     clear(scoreText); clear(boss); clear(nuclear);
     clear(nuclearIcon); clear(nuclearText);
 }
 
 void lastLevel::init(int& score, int speedMain, int speedBoss) {
-    heartPointMain->loadImage(5, 40, 10, "data/image/HP0.png", "data/image/HP1.png");
-    heartPointBoss->loadImage(10, 750, 10, "data/image/boss_HP0.png", "data/image/boss_HP1.png");
+    healthPointMain->loadImage(5, 40, 10, "data/image/HP0.png", "data/image/HP1.png");
+    healthPointBoss->loadImage(10, 750, 10, "data/image/boss_HP0.png", "data/image/boss_HP1.png");
     background = loadTexture("data/image/lastbg.png");
    
     plane->loadImage("data/image/plane0.png");
@@ -42,8 +42,8 @@ void lastLevel::init(int& score, int speedMain, int speedBoss) {
     
     aim->loadImage("data/image/target.png");  
 
-    heart->loadImage("data/image/heart_item.png");  
-    heart->setDuration(10); heart->setSpeed(300);
+    health->loadImage("data/image/health_item.png");  
+    health->setDuration(10); health->setSpeed(300);
 
     shield->setDuration(15); shield->setSpeed(300);
     shield->loadImage("data/image/shield_item.png");  
@@ -74,8 +74,8 @@ void lastLevel::startGame(int& score) {
         SDL_SetTextureAlphaMod(background, i);
         clearScreen();
         applyTexture(background, 0, 0, SCREEN_WIDTH);
-        heartPointMain->show(plane->getHeartPoint());
-        heartPointBoss->show(boss->getHeartPoint());
+        healthPointMain->show(plane->gethealthPoint());
+        healthPointBoss->show(boss->gethealthPoint());
         nuclearIcon->show();
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
@@ -92,8 +92,8 @@ void lastLevel::endGame(int& score) {
         SDL_SetTextureAlphaMod(background, i);
         clearScreen();
         applyTexture(background, 0, 0, SCREEN_WIDTH);
-        heartPointMain->show(plane->getHeartPoint());
-        heartPointBoss->show(boss->getHeartPoint());
+        healthPointMain->show(plane->gethealthPoint());
+        healthPointBoss->show(boss->gethealthPoint());
         nuclearIcon->show();
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
@@ -137,8 +137,8 @@ int lastLevel::run(int& score, int& nuclearBombs) {
         clearScreen();
         applyTexture(background, 0, 0, SCREEN_WIDTH);
         
-        heartPointMain->show(plane->getHeartPoint());
-        heartPointBoss->show(boss->getHeartPoint());
+        healthPointMain->show(plane->gethealthPoint());
+        healthPointBoss->show(boss->gethealthPoint());
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
         scoreText->show();
@@ -146,8 +146,8 @@ int lastLevel::run(int& score, int& nuclearBombs) {
         nuclearText->show();
         nuclearIcon->show();
         
-        heart->handleMove(elapsedTime);
-        if (heart->getIsMove()) heart->show();
+        health->handleMove(elapsedTime);
+        if (health->getIsMove()) health->show();
         shield->handleMove(elapsedTime);
         if (shield->getIsMove()) shield->show();    
         nuclear->handleMove(elapsedTime);
@@ -158,10 +158,10 @@ int lastLevel::run(int& score, int& nuclearBombs) {
             plane->handleMove(elapsedTime);
             plane->showShield();
             plane->show();
-            if (heart->getIsMove() && checkCollision(heart->getRect(), plane->getRect())) {
+            if (health->getIsMove() && checkCollision(health->getRect(), plane->getRect())) {
                 playSound(pop);
-                heart->setIsMove(false);
-                plane->regen();
+                health->setIsMove(false);
+                plane->heal();
             }
             if (shield->getIsMove() && checkCollision(shield->getRect(), plane->getRect())) {
                 playSound(pop);
@@ -214,7 +214,7 @@ int lastLevel::run(int& score, int& nuclearBombs) {
             boss->handleMove(elapsedTime);
             boss->transit();
             boss->show();
-            boss->regen();
+            boss->heal();
             std::vector<bulletObject*> bulletList = boss->getBulletList();
             for (int j = 0; j < bulletList.size(); ++j) {
                 bulletObject* bullet = bulletList.at(j);

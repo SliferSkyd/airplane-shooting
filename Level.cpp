@@ -5,8 +5,8 @@ const int numEnemies = 10;
 level::level() {
     plane = new mainObject();
     aim = new targetObject();
-    heartPoint = new heartPointObject();
-    heart = new bonusObject();
+    healthPoint = new healthPointObject();
+    health = new bonusObject();
     shield = new bonusObject();
     nuclear = new bonusObject();
     nuclearIcon = new baseObject();
@@ -16,8 +16,8 @@ level::level() {
 }
 
 level::~level() {
-    clear(plane); clear(aim); clear(heartPoint); 
-    clear(heart); clear(shield); clear(scoreText);
+    clear(plane); clear(aim); clear(healthPoint); 
+    clear(health); clear(shield); clear(scoreText);
     clear(nuclear); clear(nuclearIcon); clear(nuclearText);
     for (int i = 0; enemies.size(); ) {
         threatObject* enemy = enemies.at(i);
@@ -29,7 +29,7 @@ level::~level() {
 void level::init(int& score, int idLevel, int numThreat, int numHasRadar, int speedMain, int speedThreat) {
     this->idLevel = idLevel, bkg = 0;
 
-    heartPoint->loadImage(5, 40, 10, "data/image/HP0.png", "data/image/HP1.png");
+    healthPoint->loadImage(5, 40, 10, "data/image/HP0.png", "data/image/HP1.png");
     vector<bool> hasRadar = randomTrueFalse(numHasRadar, numThreat - numHasRadar);
     background = loadTexture(("data/image/bg" + to_string(idLevel) + ".png").c_str());
    
@@ -51,8 +51,8 @@ void level::init(int& score, int idLevel, int numThreat, int numHasRadar, int sp
 
     aim->loadImage("data/image/target.png");  
 
-    heart->loadImage("data/image/heart_item.png");  
-    heart->setDuration(10); heart->setSpeed(300);
+    health->loadImage("data/image/health_item.png");  
+    health->setDuration(10); health->setSpeed(300);
 
     shield->loadImage("data/image/shield_item.png"); 
     shield->setDuration(15); shield->setSpeed(300);
@@ -83,7 +83,7 @@ void level::startGame(int& score) {
         SDL_SetTextureAlphaMod(background, i);
         clearScreen();
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
-        heartPoint->show(plane->getHeartPoint());
+        healthPoint->show(plane->gethealthPoint());
         nuclearIcon->show();
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
@@ -100,7 +100,7 @@ void level::endGame(int& score) {
         SDL_SetTextureAlphaMod(background, i);
         clearScreen();
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
-        heartPoint->show(plane->getHeartPoint());
+        healthPoint->show(plane->gethealthPoint());
         nuclearIcon->show();
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
@@ -145,7 +145,7 @@ int level::run(int& score, int& nuclearBombs) {
         clearScreen();
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
         
-        heartPoint->show(plane->getHeartPoint());
+        healthPoint->show(plane->gethealthPoint());
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
         scoreText->show();
@@ -153,13 +153,13 @@ int level::run(int& score, int& nuclearBombs) {
         nuclearText->show();    
         nuclearIcon->show();
 
-        if (heart->getIsMove() && checkCollision(heart->getRect(), plane->getRect())) {
+        if (health->getIsMove() && checkCollision(health->getRect(), plane->getRect())) {
             playSound(pop);
-            heart->setIsMove(false);
-            plane->regen();
+            health->setIsMove(false);
+            plane->heal();
         }
-        heart->handleMove(elapsedTime);
-        if (heart->getIsMove()) heart->show();
+        health->handleMove(elapsedTime);
+        if (health->getIsMove()) health->show();
 
         if (shield->getIsMove() && checkCollision(shield->getRect(), plane->getRect())) {
             playSound(pop);
