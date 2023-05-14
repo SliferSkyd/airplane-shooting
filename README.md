@@ -6,17 +6,19 @@
 
 Clone this project or download directly [here](https://github.com/SliferSkyd/airplane-shooting).
 
-The executable file is called `main`. 
+The executable file is called `main.exe`. Double-click on the executable file to run.
 
-Tested in Window 10. 
+### Window
+Built and tested in Window 10. It should work well.
 
-Double-click on the executable file to run.
+### Linux
+Tested in Ubuntu 22.04. Don't guarantee it always works well. 
 
-If you want to change anything in my code, recompile by this command:
+If it doesn't run, please install:
 
-```
-mingw32-make
-```
+- MinGW: ```apt-get install mingw-w64```
+
+- SDL2 Library: ```apt-get install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev```
 
 **NOTE**: Other OS haven't be considered yet.
 
