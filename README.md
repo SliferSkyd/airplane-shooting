@@ -40,7 +40,7 @@ Besides, some bonus items may be helpful that you can collect during the game:
 - Nuclear Bomb: collect one special item allowing you to shoot 5 bullets simultaneously. It's quite hard to explain, therefore experience it during the game. Middle-click whenever you want to use it.
 
 **NOTE**: Additional features for testers:
-- `SPACE` to turn on/ off safe mode so you have unlimited time shield and  
+- `SPACE` to turn on/ off safe mode so you have unlimited time shield.  
 - `BACKSPACE` to pass the current level immediately. 
 
 Please don't use these keys to enjoy my game to the fullest. Good luck and have fun!
