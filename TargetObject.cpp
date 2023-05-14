@@ -1,4 +1,4 @@
-#include "targetObject.h"
+#include "TargetObject.h"
 
 targetObject::targetObject() {
 
