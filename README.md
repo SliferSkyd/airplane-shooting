@@ -23,20 +23,20 @@ mingw32-make
 ## How to play
 
 Use your mouse and keyboard to interact with the game.
-- Move the mouse to direct your charector following it.   
+- Move the mouse to direct your character following it.   
 - Shoot bullets by clicking left or right mouse button.
 
 This game contains 3 small levels and a final level. During first 3 levels, the number of enemies is increasing and in the last level, you have to fight with a boss.
 
-Initally, you have 5 health points and it will reset when you pass the current level. Each time being burnt or collide with an enemy, your health point is decreased by 1 and if it reaches 0, you will lose. 
+Initally, you have 5 health points and it will reset when you pass the current level. Each time being shot or colliding with an enemy, your health point is decreased by 1 and if it reaches 0, you will lose. 
 
 There are two types of enemy. Some of them will follow you no matter where you are and you can only advoid by kill it before being killed. Meanwhile, the rest simply move in a straight line.   
 
 The boss (dragon) has 10 health points and it breathes 5 fire balls at once. Moreover, it heals 1 health point every 7 seconds.
 
 Besides, some bonus items may be helpful that you can collect them during the game:
-- Heart: heal 1 health point
-- Shield: protect you from all damage for 5 seconds (maybe?)
+- Heart: heal 1 health point.
+- Shield: protect you from all damage for 5 seconds.
 - Nuclear Bomb: collect one special item allowing you to shoot 5 bullets simultaneously. It's quite hard to explain, therefore experience it during the game. Middle-click whenever you want to use it.
 
 **NOTE**: Additional features for testers:
