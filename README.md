@@ -20,6 +20,8 @@ If it doesn't run, please install:
 
 - SDL2 Library: ```apt-get install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev```
 
+If even not, write a heart letter to the United Nations, they may listen to you! 
+
 **NOTE**: Other OS haven't be considered yet.
 
 ## How to play
@@ -58,6 +60,13 @@ All images, sounds and font types are downloaded from free sources.
 Due to being my first game project, it might be exist some bugs. If you find any, please feedback to me.
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+**Potential feature developments**: 
+- The speed of enemies are increasing after each level.
+- Create shortcut key to turn on/ off music, pause/ continue.
+- Save high scores. 
+- Add various main character models and (maybe) coins collected during the game to unlock new models.
+- Attach it on online platforms in order to play without having to install.
 
 ## License
 
