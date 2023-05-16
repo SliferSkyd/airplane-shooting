@@ -16,9 +16,9 @@ Tested in Ubuntu 22.04. Don't guarantee it always works well.
 
 If it doesn't run, please install:
 
-- MinGW: ```apt-get install mingw-w64```
+- MinGW: ```$ apt-get install mingw-w64```
 
-- SDL2 Library: ```apt-get install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev```
+- SDL2 Library: ```$ apt-get install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev```
 
 If even not, write a heart letter to the United Nations, they may listen to you! 
 
@@ -41,10 +41,10 @@ The boss (dragon) has 10 health points and it breathes 5 fireballs at once. More
 Besides, some bonus items may be helpful that you can collect during the game:
 - Heart: heal 1 health point.
 - Shield: protect you from all damage for 5 seconds.
-- Nuclear Bomb: collect one special item allowing you to shoot 5 bullets simultaneously. It's quite hard to explain, therefore experience it during the game. Middle-click whenever you want to use it.
+- Nuclear Bomb: allow you to shoot 5 bullets simultaneously. It's quite hard to explain, therefore experience it during the game. Middle-click to use it.
 
-**NOTE**: Additional features for testers:
-- `SPACE` to turn on/ off safe mode so you have unlimited time shield.  
+**NOTE**: Additional keys for testers:
+- `SPACE` to turn on/ off safe mode so you have an unlimited time shield.  
 - `BACKSPACE` to pass the current level immediately. 
 
 Please don't use these keys to enjoy my game to the fullest. Good luck and have fun!
