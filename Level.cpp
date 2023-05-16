@@ -83,7 +83,7 @@ void level::startGame(int& score) {
         SDL_SetTextureAlphaMod(background, i);
         clearScreen();
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
-        healthPoint->show(plane->gethealthPoint());
+        healthPoint->show(plane->getHealthPoint());
         nuclearIcon->show();
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
@@ -100,7 +100,7 @@ void level::endGame(int& score) {
         SDL_SetTextureAlphaMod(background, i);
         clearScreen();
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
-        healthPoint->show(plane->gethealthPoint());
+        healthPoint->show(plane->getHealthPoint());
         nuclearIcon->show();
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
@@ -145,7 +145,7 @@ int level::run(int& score, int& nuclearBombs) {
         clearScreen();
         applyTexture(background, bkg, 0, SCREEN_WIDTH);
         
-        healthPoint->show(plane->gethealthPoint());
+        healthPoint->show(plane->getHealthPoint());
         aim->show();
         scoreText->setText(("Score: " + to_string(score)).c_str());
         scoreText->show();

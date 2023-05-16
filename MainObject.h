@@ -29,7 +29,7 @@ public:
     }
     int shot();
     void heal();
-    int gethealthPoint() {
+    int getHealthPoint() {
         return healthPoint;
     }
     void setSafe(const bool& safe) {

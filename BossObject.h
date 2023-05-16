@@ -16,7 +16,7 @@ public:
     void initBullet();
     int shot();
     void heal();
-    int gethealthPoint() {
+    int getHealthPoint() {
         return healthPoint;
     }
 private:
