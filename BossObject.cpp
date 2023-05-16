@@ -39,7 +39,7 @@ void bossObject::transit() {
     if (frame == 20) initBullet();
 }
 
-int bossObject::shooted() {
+int bossObject::shot() {
     --healthPoint;
     return (healthPoint == 0);
 }

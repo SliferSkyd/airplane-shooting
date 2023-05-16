@@ -119,7 +119,7 @@ void mainObject::activeShield() {
     lastShield = std::chrono::system_clock::now();
 }
 
-int mainObject::shooted() {
+int mainObject::shot() {
     --healthPoint;
     return (healthPoint <= 0);
 }

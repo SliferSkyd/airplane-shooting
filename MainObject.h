@@ -27,7 +27,7 @@ public:
     void setWon() {
         won = true;
     }
-    int shooted();
+    int shot();
     void heal();
     int gethealthPoint() {
         return healthPoint;

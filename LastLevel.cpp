@@ -180,7 +180,7 @@ int lastLevel::run(int& score, int& nuclearBombs) {
                     playSound(bossHurt);
                     explode(boss, true);
                     ++score;
-                    if (boss->shooted()) {
+                    if (boss->shot()) {
                         playSound(bossDeath);
                         haltSound(lastTheme);
                         playSound(siuu);
@@ -221,7 +221,7 @@ int lastLevel::run(int& score, int& nuclearBombs) {
                 if (checkCollision(bullet->getRect(), plane->getRect())) {
                     playSound(bomb);
                     explode(plane, false);
-                    if (!safe && !plane->checkShield() && plane->shooted()) {
+                    if (!safe && !plane->checkShield() && plane->shot()) {
                         haltSound(lastTheme);
                         playSound(mainDeath);
                         while (explosions.size()) {

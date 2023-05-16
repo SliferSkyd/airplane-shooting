@@ -14,7 +14,7 @@ public:
     void handleMove(const double& elapsedTime);
     void transit();
     void initBullet();
-    int shooted();
+    int shot();
     void heal();
     int gethealthPoint() {
         return healthPoint;

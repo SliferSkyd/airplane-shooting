@@ -222,7 +222,7 @@ int level::run(int& score, int& nuclearBombs) {
                     clear(enemy); enemy = nullptr;
                 }
                 ++score;
-                if (!safe && !plane->checkShield() && plane->shooted()) {
+                if (!safe && !plane->checkShield() && plane->shot()) {
                     haltSound(theme);
                     playSound(mainDeath);
                     endGame(score);
@@ -239,7 +239,7 @@ int level::run(int& score, int& nuclearBombs) {
                     explode(plane, false);
                     bulletList.erase(bulletList.begin() + j);
                     clear(bullet); bullet = nullptr;
-                    if (!safe && !plane->checkShield() && plane->shooted()) {
+                    if (!safe && !plane->checkShield() && plane->shot()) {
                         haltSound(theme);
                         playSound(mainDeath);
                         endGame(score);
