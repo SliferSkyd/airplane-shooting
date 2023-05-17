@@ -34,7 +34,7 @@ This game contains 3 small levels and a final level. During the first 3 levels, 
 
 Initially, you have 5 health points and it will reset when you pass the current level. Each time being shot or colliding with an enemy, your health point is decreased by 1 and if it reaches 0, you will lose. 
 
-There are two types of enemy. Some of them will follow you no matter where you are and you can only avoid by kill them before being killed. Meanwhile, the rest simply move in a straight line.   
+There are two types of enemies. Some of them will follow you no matter where you are and you can only avoid by kill them before being killed. Meanwhile, the rest simply move in a straight line.   
 
 The boss (dragon) has 10 health points and it breathes 5 fireballs at once. Moreover, it heals 1 health point every 7 seconds.
 
@@ -57,16 +57,16 @@ This game project was made entirely by me, following the instructions from:
 All images, sounds and font types are downloaded from free sources.  
 
 ## Contributing
-Due to being my first game project, it might be exist some bugs. If you find any, please feedback to me.
+Due to being my first game project, it might exist some bugs. If you find any, please feedback to me.
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 **Potential feature developments**: 
-- The speed of enemies are increasing after each level.
+- The speed of enemies are different with each level.
 - Create shortcut key to turn on/ off music, pause/ continue.
 - Save high scores. 
-- Add various main character models and (maybe) coins collected during the game to unlock new models.
-- Attach it on online platforms in order to play without having to install.
+- Add more main character models and (maybe) coins collected during the game to unlock new models.
+- Attach it to online platforms in order to play without having to install.
 
 ## License
 
