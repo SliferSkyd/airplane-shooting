@@ -20,9 +20,9 @@ If it doesn't run, please install:
 
 - SDL2 Library: ```$ apt-get install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev```
 
-If even not, write a heart letter to the United Nations, they may listen to you! 
+If even not, write a heart letter to the United Nations. They may listen to you! 
 
-**NOTE**: Other OS haven't be considered yet.
+**NOTE**: Other OS haven't been considered yet.
 
 ## How to play
 
@@ -57,13 +57,13 @@ This game project was made entirely by me, following the instructions from:
 All images, sounds and font types are downloaded from free sources.  
 
 ## Contributing
-Due to being my first game project, it might exist some bugs. If you find any, please feedback to me.
+Due to being my first game project, it might exist some bugs. If you find any, please give feedbacks to me.
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 **Potential feature developments**: 
-- The speed of enemies are different with each level.
-- Create shortcut key to turn on/ off music, pause/ continue.
+- The speed of enemies is different during each level.
+- Create a shortcut key to turn on/ off the music, pause/ continue.
 - Save high scores. 
 - Add more main character models and (maybe) coins collected during the game to unlock new models.
 - Attach it to online platforms in order to play without having to install.
